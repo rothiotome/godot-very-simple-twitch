@@ -2,7 +2,7 @@ extends Node
 
 class_name TwitchAPI
 
-@export var scopes:Array[String] = ["moderator:manage:banned_users","chat:read", "channel:manage:vips"]
+@export var scopes: Array[String] = ["moderator:manage:banned_users","chat:read", "channel:manage:vips"]
 
 const RESPONSE_TYPE = 'token'
 
@@ -19,41 +19,41 @@ const USELESS_UUID = "53125396-3e32-4fad-8f7e-36475724168b-a8fe83ab-3373-4a6a-89
 
 var free_port:int = 8090
 
-@export var port_list:Array[int] = [8091,8078,8090]
-@export var clientId = "oes235t6q9gglv9rsoyozsfvg66h34"
+@export var port_list: Array[int] = [8091,8078,8090]
+@export var client_id = ""
 
-@onready var authServer:Node = $AuthServer
+@onready var auth_server: Node = $AuthServer
 
-signal OnTokenReceived(TwitchChannel)
+signal on_token_received(TwitchChannel)
 
-var _user:TwitchChannel
+var _user: TwitchChannel
 
 func initiate_twitch_auth():
-	authServer.stopServer()
-	authServer.startServer()
+	auth_server.stop_server()
+	auth_server.start_server()
 
 	var redirect_uri = TWITCH_REDIRECT_HOST + str(free_port) + "/" + USELESS_UUID
 	var scopes_string = "+".join(scopes)
-	var url = "client_id=" + clientId + "&redirect_uri=" + redirect_uri + "&response_type=" + RESPONSE_TYPE + "&scope=" + scopes_string
+	var url = "client_id=" + client_id + "&redirect_uri=" + redirect_uri + "&response_type=" + RESPONSE_TYPE + "&scope=" + scopes_string
 
 	OS.shell_open(TWITCH_OAUTH_URL + "?" + url)
 
 func _on_auth_server_on_token_received(token) -> void:
-	authServer.stopServer()
-	var validatedUser = await validateTokenAndGetUserId(token)
-	if !(validatedUser):
+	auth_server.stop_server()
+	var validated_user = await validate_token_and_get_user_id(token)
+	if !(validated_user):
 		print('Invalid token')
 		_user = null
 		return
-	_user = validatedUser
-	OnTokenReceived.emit(_user)
+	_user = validated_user
+	on_token_received.emit(_user)
 
-func sendAPIRequest(url: String, method: HTTPClient.Method,  body: Dictionary = {}):
+func send_api_request(url: String, method: HTTPClient.Method,  body: Dictionary = {}):
 	var client = HTTPRequest.new()
 	var bodyEncoded = JSON.stringify(body)
 	add_child(client)
 	client.request(url, [
-		'Client-Id: ' + clientId,
+		'Client-Id: ' + client_id,
 		'Authorization: Bearer ' + _user.token,
 		'Content-Type: application/json'
 	], method, bodyEncoded)
@@ -72,7 +72,7 @@ func sendAPIRequest(url: String, method: HTTPClient.Method,  body: Dictionary = 
 	client.queue_free()
 	return true
 
-func validateTokenAndGetUserId(token: String):
+func validate_token_and_get_user_id(token: String):
 	var client = HTTPRequest.new()
 	add_child(client)
 	client.request(TWITCH_VALIDATE_URL, [
@@ -91,34 +91,31 @@ func validateTokenAndGetUserId(token: String):
 	client.queue_free()
 	return user	
 
-func timeoutUser(userToBanId: String, duration: int = 1, reason: String = ''):
+func timeout_user(user_to_ban_id: String, duration: int = 1, reason: String = ''):
 	if !_user:
 		return
 
-	var timeoutDuration = max(duration, 1)
+	var timeout_duration = max(duration, 1)
 	var url = TWITCH_BAN_URL + '?broadcaster_id=' +  _user.id + '&moderator_id=' + _user.id
 	var body = {
 		data = {
-			user_id = userToBanId,
-			duration = timeoutDuration,
+			user_id = user_to_ban_id,
+			duration = timeout_duration,
 			reason = reason
 		},
 	}
-	return await sendAPIRequest(url, HTTPClient.METHOD_POST, body)
+	return await send_api_request(url, HTTPClient.METHOD_POST, body)
 
-func addVip(userId: String):
+func add_vip(user_to_vip_id: String):
 	if !_user:
 		return
 
-	print('adding vip to user ', userId)
-	var url = TWITCH_VIP_URL + '?broadcaster_id=' +  _user.id + '&user_id=' + userId
-	return await sendAPIRequest(url, HTTPClient.METHOD_POST)
+	var url = TWITCH_VIP_URL + '?broadcaster_id=' +  _user.id + '&user_id=' + user_to_vip_id
+	return await send_api_request(url, HTTPClient.METHOD_POST)
 
-func removeVip(userId: String):
+func remove_vip(user_to_vip_id: String):
 	if !_user:
 		return
 
-	print('removing vip to user ', userId)
-	var url = TWITCH_VIP_URL + '?broadcaster_id=' +  _user.id + '&user_id=' + userId
-	return await sendAPIRequest(url, HTTPClient.METHOD_DELETE)
-
+	var url = TWITCH_VIP_URL + '?broadcaster_id=' +  _user.id + '&user_id=' + user_to_vip_id
+	return await send_api_request(url, HTTPClient.METHOD_DELETE)

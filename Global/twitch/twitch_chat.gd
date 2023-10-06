@@ -3,15 +3,15 @@ extends Node
 class_name TwitchChat
 
 signal OnSucess
-signal OnMessage(chatter:Chatter)
-signal OnFailure(reason:String)
+signal OnMessage(chatter: Chatter)
+signal OnFailure(reason: String)
 
-var _channel:TwitchChannel
+var _channel: TwitchChannel
 
-var _chatClient:WebSocketPeer
-var _hasConnected:bool = false
+var _chatClient: WebSocketPeer
+var _hasConnected:= false
 
-func _process(_delta:float):
+func _process(_delta: float):
 	if !_chatClient:
 		return
 
@@ -33,7 +33,7 @@ func _process(_delta:float):
 				print("Reconnecting")
 				start_chat_client(_channel)
 
-func start_chat_client(channel:TwitchChannel):
+func start_chat_client(channel: TwitchChannel):
 	_channel = channel
 	if _chatClient:
 		_chatClient.close()
@@ -44,9 +44,17 @@ func onChatConnected():
 	if !_channel:
 		return
 	_hasConnected = true
+	
 	_chatClient.send_text("CAP REQ :twitch.tv/tags twitch.tv/commands")
-	_chatClient.send_text('PASS oauth:' + _channel.token)
-	_chatClient.send_text('NICK ' + _channel.login.to_lower())
+	
+	if TwitchChatSettings.USE_ANON_CONNECTION:
+		_chatClient.send_text('PASS ' + TwitchChatSettings.TWITCH_ANON_PASS)
+		_chatClient.send_text('NICK ' + TwitchChatSettings.TWITCH_ANON_USER)
+	else:
+		_chatClient.send_text('PASS oauth:' + _channel.token)
+		_chatClient.send_text('NICK ' + _channel.login.to_lower())
+		pass
+		
 	_chatClient.send_text('JOIN ' + '#' + _channel.login.to_lower())
 	OnSucess.emit()
 
@@ -57,13 +65,13 @@ func onReceivedData(payload: PackedByteArray):
 func send(message):
 	pass
 		
-func handle_message(message:String):
+func handle_message(message: String):
 	if message.begins_with("PING"):
 		send(message.replace("PING", "PONG"))
 		#pong.emit()
 		return
 
-	var parsed_message:PackedStringArray = message.split(" ", true, 4) # We might need more than 3
+	var parsed_message: PackedStringArray = message.split(" ", true, 4) # We might need more than 3
 
 # 0 -> BADGES
 # 1 -> login
@@ -91,17 +99,22 @@ func handle_message(message:String):
 			#handle_command(sender_data, msg[3].split(" ", true, 1))
 			#chat_message.emit(sender_data, msg[3].right(-1))
 
-func handle_privmsg(msg:PackedStringArray):
+func handle_privmsg(msg: PackedStringArray):
 		
 	var chatter = Chatter.new()
-	chatter.login = Utils.parse_login(msg[1])
-	chatter.channel = Utils.parse_channel(msg[3])
-	chatter.message = Utils.parse_message(msg[4])
-	chatter.tags = Utils.parse_tags(msg[0])
+	chatter.login = TwitchParseHelper.parse_login(msg[1])
+	chatter.channel = TwitchParseHelper.parse_channel(msg[3])
+	chatter.message = TwitchParseHelper.parse_message(msg[4])
+	chatter.tags = TwitchParseHelper.parse_tags(msg[0])
 	
-	print("login: "+ chatter.login)
-	print("channel: "+ chatter.channel)
-	print("message: "+ chatter.message)
-	print("color_hex: "+ chatter.tags.color_hex)
-	print("display_name: "+ chatter.tags.display_name)
-	#:ytgard!ytgard@ytgard.tmi.twitch.tv
+	if chatter.tags.color_hex.is_empty():
+		chatter.tags.color_hex = TwitchUtils.get_random_name_color(chatter.login)
+	print_rich("[color=green][b]=================[/b][/color]")
+	print_rich("[color=yellow]login:[/color] "+ chatter.login)
+	print_rich("[color=yellow]channel:[/color] "+ chatter.channel)
+	print_rich("[color=yellow]message:[/color] "+ chatter.message)
+	print_rich("[color=yellow]color_hex:[/color] "+ chatter.tags.color_hex)
+	print_rich("[color=yellow]display_name:[/color] "+ chatter.tags.display_name)
+	print_rich("[color=yellow]badges:[/color] ")
+	print(chatter.tags.badges)
+	print_rich("[color=green][b]=================[/b][/color]")

@@ -1,6 +1,6 @@
 extends Node
 
-class_name Utils
+class_name TwitchParseHelper
 
 static func parse_login(input_string:String) -> String:
 	return get_substring(input_string, ":", "!")
@@ -9,7 +9,7 @@ static func parse_channel(input_string:String) -> String:
 	return input_string.trim_prefix("#")
 	
 static func parse_message(input_string:String) -> String:
-	return input_string.trim_prefix(":")
+	return input_string.trim_prefix(":").strip_edges()
 	
 static func parse_tags(input_string:String) -> IRCTags:
 	var irc_tags = IRCTags.new()
@@ -44,6 +44,7 @@ static func parse_badges(input:PackedStringArray) -> Dictionary:
 	return badges
 	
 static func parse_emotes(input:PackedStringArray) -> Dictionary:
+	#TODO: Parse emotes if needed
 	return {}
 
 static func get_substring(input_string:String, starting_char:String, ending_char:String) -> String:

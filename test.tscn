@@ -1,22 +1,21 @@
 [gd_scene load_steps=5 format=3 uid="uid://chdoyu0wvtajp"]
 
 [ext_resource type="Script" path="res://test.gd" id="1_x3meo"]
-[ext_resource type="Script" path="res://Global/twitch/TwitchAPI.gd" id="2_3s0ub"]
-[ext_resource type="Script" path="res://Global/twitch/AuthServer.gd" id="2_cwq0p"]
-[ext_resource type="Script" path="res://Global/twitch/TwitchChat.gd" id="4_cvto0"]
+[ext_resource type="Script" path="res://Global/twitch/twitch_api.gd" id="2_g6o5c"]
+[ext_resource type="Script" path="res://Global/twitch/auth_server.gd" id="3_f0vxw"]
+[ext_resource type="Script" path="res://Global/twitch/twitch_chat.gd" id="4_6uqt0"]
 
 [node name="Test" type="Node2D"]
 script = ExtResource("1_x3meo")
 
 [node name="TwitchAPI" type="Node" parent="."]
-script = ExtResource("2_3s0ub")
-clientId = ""
+script = ExtResource("2_g6o5c")
 
 [node name="AuthServer" type="Node" parent="TwitchAPI"]
-script = ExtResource("2_cwq0p")
+script = ExtResource("3_f0vxw")
 
 [node name="TwitchChat" type="Node" parent="."]
-script = ExtResource("4_cvto0")
+script = ExtResource("4_6uqt0")
 
-[connection signal="OnTokenReceived" from="TwitchAPI" to="." method="_on_twitch_api_on_token_received"]
+[connection signal="on_token_received" from="TwitchAPI" to="." method="_on_twitch_api_on_token_received"]
 [connection signal="OnTokenReceived" from="TwitchAPI/AuthServer" to="TwitchAPI" method="_on_auth_server_on_token_received"]
