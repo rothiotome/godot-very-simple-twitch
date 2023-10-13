@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3asrgnlj151a"]
+
+[ext_resource type="Script" path="res://ChatMessage.gd" id="1_mpl0c"]
+
+[node name="ChatMessage" type="HBoxContainer"]
+size_flags_horizontal = 3
+script = ExtResource("1_mpl0c")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "Testg"
+fit_content = true
+scroll_active = false

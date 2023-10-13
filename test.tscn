@@ -1,12 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://chdoyu0wvtajp"]
+[gd_scene load_steps=6 format=3 uid="uid://yhuh0huitds8"]
 
-[ext_resource type="Script" path="res://test.gd" id="1_x3meo"]
+[ext_resource type="Script" path="res://game-controller.gd" id="1_x3w07"]
 [ext_resource type="Script" path="res://Global/twitch/twitch_api.gd" id="2_g6o5c"]
 [ext_resource type="Script" path="res://Global/twitch/auth_server.gd" id="3_f0vxw"]
 [ext_resource type="Script" path="res://Global/twitch/twitch_chat.gd" id="4_6uqt0"]
+[ext_resource type="Script" path="res://ChatContainer.gd" id="5_ovhdc"]
 
-[node name="Test" type="Node2D"]
-script = ExtResource("1_x3meo")
+[node name="world" type="Node2D"]
+script = ExtResource("1_x3w07")
 
 [node name="TwitchAPI" type="Node" parent="."]
 script = ExtResource("2_g6o5c")
@@ -15,7 +16,45 @@ script = ExtResource("2_g6o5c")
 script = ExtResource("3_f0vxw")
 
 [node name="TwitchChat" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("4_6uqt0")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChatContainer" type="VBoxContainer" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_ovhdc")
+
+[node name="Chat" type="Panel" parent="CanvasLayer/Control/ChatContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control/ChatContainer/Chat"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChatMessageContainer" type="VBoxContainer" parent="CanvasLayer/Control/ChatContainer/Chat/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [connection signal="on_token_received" from="TwitchAPI" to="." method="_on_twitch_api_on_token_received"]
 [connection signal="OnTokenReceived" from="TwitchAPI/AuthServer" to="TwitchAPI" method="_on_auth_server_on_token_received"]
+[connection signal="OnMessage" from="TwitchChat" to="." method="_on_twitch_chat_on_message"]

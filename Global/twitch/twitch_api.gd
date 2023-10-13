@@ -20,7 +20,7 @@ const USELESS_UUID = "53125396-3e32-4fad-8f7e-36475724168b-a8fe83ab-3373-4a6a-89
 var free_port:int = 8090
 
 @export var port_list: Array[int] = [8091,8078,8090]
-@export var client_id = ""
+const client_id = ""
 
 @onready var auth_server: Node = $AuthServer
 
@@ -30,7 +30,7 @@ var _user: TwitchChannel
 
 func initiate_twitch_auth():
 	auth_server.stop_server()
-	auth_server.start_server()
+	auth_server.start_server(8090)
 
 	var redirect_uri = TWITCH_REDIRECT_HOST + str(free_port) + "/" + USELESS_UUID
 	var scopes_string = "+".join(scopes)

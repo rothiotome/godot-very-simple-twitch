@@ -1,8 +1,6 @@
 extends Node
 
 signal OnTokenReceived(token: String)
-
-@export var PORT = 8090
 var SERVER_IDENTITY = 'AUTH_SERVER'
 # query param name
 var TOKEN_KEY = 'token'
@@ -11,9 +9,9 @@ var AUTHENTICATION_REDIRECT_FILE_PATH = 'res://public/index.html'
 var _clients: Array[StreamPeerTCP] = []
 var _server: TCPServer
 
-func start_server():
+func start_server(port: int):
 	_server = TCPServer.new()
-	_server.listen(PORT)
+	_server.listen(port)
 	print("Server started")
 
 func stop_server():

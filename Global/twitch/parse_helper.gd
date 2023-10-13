@@ -10,6 +10,7 @@ static func parse_channel(input_string:String) -> String:
 	
 static func parse_message(input_string:String) -> String:
 	return input_string.trim_prefix(":").strip_edges()
+
 	
 static func parse_tags(input_string:String) -> IRCTags:
 	var irc_tags = IRCTags.new()
@@ -28,14 +29,14 @@ static func parse_tags(input_string:String) -> IRCTags:
 			"display-name":
 				irc_tags.display_name = splitted_tag[1]
 			"emotes":
-				irc_tags.emotes = parse_emotes(splitted_tag[1].split(","))
-			"room_id":
+				irc_tags.emotes = parse_emotes(splitted_tag[1].split("/"))
+			"room-id":
 				irc_tags.user_id = splitted_tag[1]
 				
 	return irc_tags
 	
 static func parse_badges(input:PackedStringArray) -> Dictionary:
-	var badges:Dictionary = {}
+	var badges: Dictionary = {}
 	if input.is_empty() || input[0].is_empty(): return badges
 	
 	for i in len(input):
@@ -44,8 +45,12 @@ static func parse_badges(input:PackedStringArray) -> Dictionary:
 	return badges
 	
 static func parse_emotes(input:PackedStringArray) -> Dictionary:
-	#TODO: Parse emotes if needed
-	return {}
+	var emotes: Dictionary = {}
+	if input.is_empty() || input[0].is_empty(): return emotes
+	for emote in input:
+		var substring: PackedStringArray = emote.split(":")
+		emotes[substring[0]] = substring[1]
+	return emotes
 
 static func get_substring(input_string:String, starting_char:String, ending_char:String) -> String:
 	var first_index = input_string.find(starting_char)

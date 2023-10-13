@@ -13,6 +13,9 @@ export_presets.cfg
 # Imported translations (automatically generated from CSV files)
 *.translation
 
+# Add Builds folder
+[Bb]uilds/
+
 # Mono-specific ignores
 .mono/
 data_*/
