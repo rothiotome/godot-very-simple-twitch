@@ -1,10 +1,10 @@
 [gd_scene load_steps=2 format=3 uid="uid://d3asrgnlj151a"]
 
-[ext_resource type="Script" path="res://ChatMessage.gd" id="1_mpl0c"]
+[ext_resource type="Script" path="res://example/ChatMessage.gd" id="1_h3nqp"]
 
 [node name="ChatMessage" type="HBoxContainer"]
 size_flags_horizontal = 3
-script = ExtResource("1_mpl0c")
+script = ExtResource("1_h3nqp")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 2

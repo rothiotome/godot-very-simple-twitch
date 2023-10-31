@@ -5,10 +5,10 @@ class_name ChatContainer
 @onready var scroll_container = $Chat/ScrollContainer
 @onready var chat_message_container = $Chat/ScrollContainer/ChatMessageContainer
 
-@onready var twitch_chat = $"/root/world/TwitchChat"
+@onready var twitch_chat = %TwitchChat
 
 func create_chatter_msg(chatter: Chatter):
-	var msg_node: ChatMessage = preload("res://ChatMessage.tscn").instantiate()
+	var msg_node: ChatMessage = preload("res://example/ChatMessage.tscn").instantiate()
 	
 	var badges:String = await get_badges(chatter)
 	chatter.message = escape_bbcode(chatter.message)

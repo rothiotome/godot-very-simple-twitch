@@ -109,7 +109,6 @@ func handle_message(message: String):
 			#chat_message.emit(sender_data, msg[3].right(-1))
 
 func handle_privmsg(msg: PackedStringArray):
-		
 	var chatter = Chatter.new()
 	chatter.login = TwitchParseHelper.parse_login(msg[1])
 	chatter.channel = TwitchParseHelper.parse_channel(msg[3])
@@ -121,15 +120,6 @@ func handle_privmsg(msg: PackedStringArray):
 		chatter.tags.color_hex = TwitchUtils.get_random_name_color(chatter.login)
 		
 	OnMessage.emit(chatter)
-#	print_rich("[color=green][b]=================[/b][/color]")
-#	print_rich("[color=yellow]login:[/color] "+ chatter.login)
-#	print_rich("[color=yellow]channel:[/color] "+ chatter.channel)
-#	print_rich("[color=yellow]message:[/color] "+ chatter.message)
-#	print_rich("[color=yellow]color_hex:[/color] "+ chatter.tags.color_hex)
-#	print_rich("[color=yellow]display_name:[/color] "+ chatter.tags.display_name)
-#	print_rich("[color=yellow]badges:[/color] ")
-#	print(chatter.tags.badges)
-#	print_rich("[color=green][b]=================[/b][/color]")
 
 func get_emote(emote_id: String, scale: String = "1.0") -> Texture2D:
 	var texture: Texture2D

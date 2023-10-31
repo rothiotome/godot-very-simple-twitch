@@ -22,13 +22,15 @@ var free_port:int = 8090
 @export var port_list: Array[int] = [8091,8078,8090]
 const client_id = ""
 
-@onready var auth_server: Node = $AuthServer
-
 signal on_token_received(TwitchChannel)
 
 var _user: TwitchChannel
 
 func initiate_twitch_auth():
+	var auth_server_r = preload("res://addons/very-simple-twitch/auth_server.gd")
+	var auth_server = auth_server_r.new()
+	add_child(auth_server)
+	auth_server.OnTokenReceived.connect(_on_auth_server_on_token_received)
 	auth_server.stop_server()
 	auth_server.start_server(8090)
 
@@ -39,7 +41,6 @@ func initiate_twitch_auth():
 	OS.shell_open(TWITCH_OAUTH_URL + "?" + url)
 
 func _on_auth_server_on_token_received(token) -> void:
-	auth_server.stop_server()
 	var validated_user = await validate_token_and_get_user_id(token)
 	if !(validated_user):
 		print('Invalid token')

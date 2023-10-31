@@ -1,23 +1,19 @@
-[gd_scene load_steps=6 format=3 uid="uid://yhuh0huitds8"]
+[gd_scene load_steps=5 format=3 uid="uid://yhuh0huitds8"]
 
-[ext_resource type="Script" path="res://game-controller.gd" id="1_x3w07"]
-[ext_resource type="Script" path="res://Global/twitch/twitch_api.gd" id="2_g6o5c"]
-[ext_resource type="Script" path="res://Global/twitch/auth_server.gd" id="3_f0vxw"]
-[ext_resource type="Script" path="res://Global/twitch/twitch_chat.gd" id="4_6uqt0"]
-[ext_resource type="Script" path="res://ChatContainer.gd" id="5_ovhdc"]
+[ext_resource type="Script" path="res://example/game-controller.gd" id="1_y8ty4"]
+[ext_resource type="Script" path="res://addons/very-simple-twitch/twitch_api.gd" id="2_kxlmn"]
+[ext_resource type="Script" path="res://addons/very-simple-twitch/twitch_chat.gd" id="4_yqbwg"]
+[ext_resource type="Script" path="res://example/ChatContainer.gd" id="5_rggnq"]
 
-[node name="world" type="Node2D"]
-script = ExtResource("1_x3w07")
+[node name="test" type="Node2D"]
+script = ExtResource("1_y8ty4")
 
 [node name="TwitchAPI" type="Node" parent="."]
-script = ExtResource("2_g6o5c")
-
-[node name="AuthServer" type="Node" parent="TwitchAPI"]
-script = ExtResource("3_f0vxw")
+script = ExtResource("2_kxlmn")
 
 [node name="TwitchChat" type="Node" parent="."]
 unique_name_in_owner = true
-script = ExtResource("4_6uqt0")
+script = ExtResource("4_yqbwg")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -36,7 +32,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("5_ovhdc")
+script = ExtResource("5_rggnq")
 
 [node name="Chat" type="Panel" parent="CanvasLayer/Control/ChatContainer"]
 layout_mode = 2
@@ -56,5 +52,4 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [connection signal="on_token_received" from="TwitchAPI" to="." method="_on_twitch_api_on_token_received"]
-[connection signal="OnTokenReceived" from="TwitchAPI/AuthServer" to="TwitchAPI" method="_on_auth_server_on_token_received"]
 [connection signal="OnMessage" from="TwitchChat" to="." method="_on_twitch_chat_on_message"]

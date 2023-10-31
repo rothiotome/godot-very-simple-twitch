@@ -11,6 +11,6 @@ config_version=5
 [application]
 
 config/name="StreamSim"
-run/main_scene="res://test.tscn"
+run/main_scene="res://example/test.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"

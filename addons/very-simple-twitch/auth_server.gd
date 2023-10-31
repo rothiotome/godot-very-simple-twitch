@@ -2,9 +2,9 @@ extends Node
 
 signal OnTokenReceived(token: String)
 var SERVER_IDENTITY = 'AUTH_SERVER'
-# query param name
+
 var TOKEN_KEY = 'token'
-var AUTHENTICATION_REDIRECT_FILE_PATH = 'res://public/index.html'
+var AUTHENTICATION_REDIRECT_FILE_PATH = 'res://addons/very-simple-twitch/public/index.html'
 
 var _clients: Array[StreamPeerTCP] = []
 var _server: TCPServer
@@ -59,6 +59,8 @@ func handlePost(client: StreamPeer, url: String):
 		return
 	OnTokenReceived.emit(token)
 	send200(client)
+	stop_server()
+	queue_free()
 
 func handleGet(client: StreamPeer):
 	var pageAsString = loadLoginPage()
@@ -72,7 +74,7 @@ func getTokenFromQuery(query: String):
 		if key == TOKEN_KEY:
 			return splittedKeyValue[1]
 
-func send200(client: StreamPeer, data: String = "", content_type: String = "text/html") -> void:
+func send200(client: StreamPeer, data: String = "", content_type: String = "text/html"):
 	var dataAsBuffer = data.to_ascii_buffer()
 	client.put_data(("HTTP/1.1 %d %s\r\n" % [200, 'OK']).to_ascii_buffer())
 	client.put_data(("Server: %s\r\n" % SERVER_IDENTITY).to_ascii_buffer())
