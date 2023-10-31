@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="StreamSim"
+config/name="Godot Very Simple Twitch"
 run/main_scene="res://example/test.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://icon.png"

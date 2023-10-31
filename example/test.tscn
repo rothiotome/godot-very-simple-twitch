@@ -15,6 +15,9 @@ script = ExtResource("2_kxlmn")
 unique_name_in_owner = true
 script = ExtResource("4_yqbwg")
 
+[node name="TwitchChat" type="Node" parent="TwitchChat"]
+script = ExtResource("4_yqbwg")
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="CanvasLayer"]
@@ -53,3 +56,4 @@ size_flags_vertical = 3
 
 [connection signal="on_token_received" from="TwitchAPI" to="." method="_on_twitch_api_on_token_received"]
 [connection signal="OnMessage" from="TwitchChat" to="." method="_on_twitch_chat_on_message"]
+[connection signal="OnMessage" from="TwitchChat/TwitchChat" to="." method="_on_twitch_chat_on_message"]
