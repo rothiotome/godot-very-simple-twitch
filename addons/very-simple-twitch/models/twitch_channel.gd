@@ -1,5 +1,3 @@
-extends Resource
-
 class_name TwitchChannel
 
 var login: String

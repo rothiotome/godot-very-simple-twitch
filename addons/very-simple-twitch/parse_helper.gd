@@ -1,17 +1,17 @@
-extends Node
-
 class_name TwitchParseHelper
 
 static func parse_login(input_string:String) -> String:
 	return get_substring(input_string, ":", "!")
 
+
 static func parse_channel(input_string:String) -> String:
 	return input_string.trim_prefix("#")
-	
+
+
 static func parse_message(input_string:String) -> String:
 	return input_string.trim_prefix(":").strip_edges()
 
-	
+
 static func parse_tags(input_string:String) -> IRCTags:
 	var irc_tags = IRCTags.new()
 	var tags:PackedStringArray = input_string.split(";")
@@ -34,7 +34,8 @@ static func parse_tags(input_string:String) -> IRCTags:
 				irc_tags.user_id = splitted_tag[1]
 				
 	return irc_tags
-	
+
+
 static func parse_badges(input:PackedStringArray) -> Dictionary:
 	var badges: Dictionary = {}
 	if input.is_empty() || input[0].is_empty(): return badges
@@ -43,7 +44,8 @@ static func parse_badges(input:PackedStringArray) -> Dictionary:
 		var substrings = input[i].split("/")
 		badges[substrings[0]] = substrings[1]
 	return badges
-	
+
+
 static func parse_emotes(input:PackedStringArray) -> Dictionary:
 	var emotes: Dictionary = {}
 	if input.is_empty() || input[0].is_empty(): return emotes
@@ -51,6 +53,7 @@ static func parse_emotes(input:PackedStringArray) -> Dictionary:
 		var substring: PackedStringArray = emote.split(":")
 		emotes[substring[0]] = substring[1]
 	return emotes
+
 
 static func get_substring(input_string:String, starting_char:String, ending_char:String) -> String:
 	var first_index = input_string.find(starting_char)
