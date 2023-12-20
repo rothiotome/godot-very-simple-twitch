@@ -12,5 +12,13 @@ config_version=5
 
 config/name="Godot Very Simple Twitch"
 run/main_scene="res://example/test.tscn"
-config/features=PackedStringArray("4.1", "Forward Plus")
-config/icon="res://icon.png"
+config/features=PackedStringArray("4.2", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+VerySimpleTwitch="*res://addons/very-simple-twitch/twitch_node.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/very-simple-twitch/plugin.cfg")

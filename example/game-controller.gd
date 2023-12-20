@@ -1,14 +1,10 @@
-extends Node2D
+extends Node
 
-@onready var chatContainer: ChatContainer = $CanvasLayer/Control/ChatContainer
-
-var number_of_messages:=0
+@onready var chatContainer: ChatContainer = %ChatContainer
 
 func _ready():
-	$TwitchAPI.initiate_twitch_auth()
+	VerySimpleTwitch.chat_message_received.connect(on_chat_message_received)
+	VerySimpleTwitch.get_token()
 
-func _on_twitch_api_on_token_received(channel_info:TwitchChannel):
-	$TwitchChat.start_chat_client(channel_info)
-
-func _on_twitch_chat_on_message(chatter: Chatter):
+func on_chat_message_received(chatter: Chatter):
 	chatContainer.create_chatter_msg(chatter)

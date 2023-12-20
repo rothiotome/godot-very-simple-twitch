@@ -1,5 +1,3 @@
-extends Node
-
 class_name TwitchUtils
 
 const LUMINANCE_LOW := 0.2
@@ -27,13 +25,15 @@ static func get_random_name_color(login: String, session_seed:int = 0):
 	var position: int = session_seed + hash(login)
 	return DEFAULT_NAME_COLORS[position % DEFAULT_NAME_COLORS.size()]
 
+
 static func normalize_color(color: Color) -> Color:
 	var luminance = color.get_luminance()
-	if(luminance > LUMINANCE_HIGH):
+	if luminance > LUMINANCE_HIGH:
 		return color.darkened(0.2)
-	if(luminance < LUMINANCE_LOW):
+	if luminance < LUMINANCE_LOW:
 		return color.lightened(0.2)
 	return color
-	
+
+
 static func normalize_hex_color(color: String) -> Color:
 	return normalize_color(Color(color))

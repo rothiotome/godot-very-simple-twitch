@@ -23,6 +23,14 @@ var caches := {
 	RequestType.BADGE_MAPPING: {}
 }
 
+var _client_id: String
+var _twitch_chat_url: String
+var _twitch_chat_port: int
+
+var _use_anon_connection: bool
+var _use_cache: bool
+var _cache_path: String
+
 const USER_AGENT : String = "User-Agent: VSTC/0.1.0 (Godot Engine)"
 
 func _process(_delta: float):
@@ -48,11 +56,12 @@ func _process(_delta: float):
 				start_chat_client(_channel)
 
 func start_chat_client(channel: TwitchChannel):
+	get_settings()
 	_channel = channel
 	if _chatClient:
 		_chatClient.close()
 	_chatClient = WebSocketPeer.new()
-	_chatClient.connect_to_url("%s:%d" % [TwitchChatSettings.TWITCH_CHAT_WS_URL, TwitchChatSettings.TWITCH_PORT])
+	_chatClient.connect_to_url("%s:%d" % [_twitch_chat_url, _twitch_chat_port])
 
 func onChatConnected():
 	if !_channel:
@@ -61,9 +70,9 @@ func onChatConnected():
 	
 	_chatClient.send_text("CAP REQ :twitch.tv/tags twitch.tv/commands")
 	
-	if TwitchChatSettings.USE_ANON_CONNECTION:
-		_chatClient.send_text('PASS ' + TwitchChatSettings.TWITCH_ANON_PASS)
-		_chatClient.send_text('NICK ' + TwitchChatSettings.TWITCH_ANON_USER)
+	if _use_anon_connection:
+		_chatClient.send_text('PASS ' + TwitchSettings.get_setting(TwitchSettings.settings.twitch_anon_pass))
+		_chatClient.send_text('NICK ' + TwitchSettings.get_setting(TwitchSettings.settings.twitch_anon_user))
 	else:
 		_chatClient.send_text('PASS oauth:' + _channel.token)
 		_chatClient.send_text('NICK ' + _channel.login.to_lower())
@@ -124,10 +133,10 @@ func handle_privmsg(msg: PackedStringArray):
 func get_emote(emote_id: String, scale: String = "1.0") -> Texture2D:
 	var texture: Texture2D
 	var cachename: String = emote_id + "_" + scale
-	var filename: String = TwitchChatSettings.DISK_CACHE_PATH + "/" + RequestType.keys()[RequestType.EMOTE] + "/" + cachename + ".png"
+	var filename: String = _cache_path + "/" + RequestType.keys()[RequestType.EMOTE] + "/" + cachename + ".png"
 	
 	if !caches[RequestType.EMOTE].has(cachename):
-		if TwitchChatSettings.DISK_CACHE && FileAccess.file_exists(filename):
+		if _use_cache && FileAccess.file_exists(filename):
 			var img: Image = Image.new()
 			img.load_png_from_buffer(FileAccess.get_file_as_bytes(filename))
 			texture = ImageTexture.create_from_image(img)
@@ -140,7 +149,7 @@ func get_emote(emote_id: String, scale: String = "1.0") -> Texture2D:
 			var img: Image = Image.new()
 			img.load_png_from_buffer(data[3])
 			texture = ImageTexture.create_from_image(img)
-			if TwitchChatSettings.DISK_CACHE:
+			if _use_cache:
 				DirAccess.make_dir_recursive_absolute(filename.get_base_dir())
 				texture.get_image().save_png(filename)
 			request.queue_free()
@@ -151,11 +160,11 @@ func get_emote(emote_id: String, scale: String = "1.0") -> Texture2D:
 func get_badge(badge_name: String, badge_level: String, channel_id: String = "_global", scale: String = "1") -> Texture2D:
 	var texture: Texture2D
 	var cachename = badge_name + "_" + badge_level + "_" + scale
-	var filename: String = TwitchChatSettings.DISK_CACHE_PATH + "/" + RequestType.keys()[RequestType.BADGE] + "/" + channel_id + "/" + cachename + ".png"
+	var filename: String = _cache_path + "/" + RequestType.keys()[RequestType.BADGE] + "/" + channel_id + "/" + cachename + ".png"
 	if !caches[RequestType.BADGE].has(channel_id):
 		caches[RequestType.BADGE][channel_id] = {}
 	if !caches[RequestType.BADGE][channel_id].has(cachename):
-		if TwitchChatSettings.DISK_CACHE && FileAccess.file_exists(filename):
+		if _use_cache && FileAccess.file_exists(filename):
 			var img : Image = Image.new()
 			img.load_png_from_buffer(FileAccess.get_file_as_bytes(filename))
 			texture = ImageTexture.create_from_image(img)
@@ -177,7 +186,7 @@ func get_badge(badge_name: String, badge_level: String, channel_id: String = "_g
 					return await(get_badge(badge_name, badge_level, "_global", scale))
 			elif channel_id != "_global":
 				return await(get_badge(badge_name, badge_level, "_global", scale))
-			if TwitchChatSettings.DISK_CACHE:
+			if _use_cache:
 				DirAccess.make_dir_recursive_absolute(filename.get_base_dir())
 				texture.get_image().save_png(filename)
 		texture.take_over_path(filename)
@@ -186,13 +195,13 @@ func get_badge(badge_name: String, badge_level: String, channel_id: String = "_g
 
 func get_badge_mapping(channel_id: String = "_global") -> Dictionary:
 	
-	if TwitchChatSettings.USE_ANON_CONNECTION: return {}
+	if _use_anon_connection: return {}
 		
 	if caches[RequestType.BADGE_MAPPING].has(channel_id):
 		return caches[RequestType.BADGE_MAPPING][channel_id]
 
-	var filename: String = TwitchChatSettings.DISK_CACHE_PATH + "/" + RequestType.keys()[RequestType.BADGE_MAPPING] + "/" + channel_id + ".json"
-	if (TwitchChatSettings.DISK_CACHE && FileAccess.file_exists(filename)):
+	var filename: String = _cache_path + "/" + RequestType.keys()[RequestType.BADGE_MAPPING] + "/" + channel_id + ".json"
+	if _use_cache && FileAccess.file_exists(filename):
 		var cache = JSON.parse_string(FileAccess.get_file_as_string(filename))
 		if "badge_sets" in cache:
 			return cache["badge_sets"]
@@ -200,7 +209,7 @@ func get_badge_mapping(channel_id: String = "_global") -> Dictionary:
 	var request : HTTPRequest = HTTPRequest.new()
 	add_child(request)
 	
-	request.request("https://api.twitch.tv/helix/chat/badges" + ("/global" if channel_id == "_global" else "?broadcaster_id=" + _channel.id), [USER_AGENT, "Authorization: Bearer " + _channel.token, "Client-Id:" + TwitchAPI.client_id, "Content-Type: application/json"], HTTPClient.METHOD_GET)
+	request.request("https://api.twitch.tv/helix/chat/badges" + ("/global" if channel_id == "_global" else "?broadcaster_id=" + _channel.id), [USER_AGENT, "Authorization: Bearer " + _channel.token, "Client-Id:" + _client_id, "Content-Type: application/json"], HTTPClient.METHOD_GET)
 	
 	var reply : Array = await(request.request_completed)
 	var response : Dictionary = JSON.parse_string(reply[3].get_string_from_utf8())
@@ -213,7 +222,7 @@ func get_badge_mapping(channel_id: String = "_global") -> Dictionary:
 	request.queue_free()
 	if (reply[1] == HTTPClient.RESPONSE_OK):
 		caches[RequestType.BADGE_MAPPING][channel_id] = mappings
-		if (TwitchChatSettings.DISK_CACHE):
+		if _use_cache:
 			DirAccess.make_dir_recursive_absolute(filename.get_base_dir())
 			var file : FileAccess = FileAccess.open(filename, FileAccess.WRITE)
 			file.store_string(JSON.stringify(mappings))
@@ -221,3 +230,11 @@ func get_badge_mapping(channel_id: String = "_global") -> Dictionary:
 		print("Could not retrieve badge mapping for channel_id " + channel_id + ".")
 		return {}
 	return caches[RequestType.BADGE_MAPPING][channel_id]
+
+func get_settings():
+	_client_id = TwitchSettings.get_setting(TwitchSettings.settings.client_id)
+	_twitch_chat_url = TwitchSettings.get_setting(TwitchSettings.settings.twitch_chat_url)
+	_twitch_chat_port = TwitchSettings.get_setting(TwitchSettings.settings.twitch_port)
+	_use_anon_connection = TwitchSettings.get_setting(TwitchSettings.settings.use_anon_connection)
+	_use_cache = TwitchSettings.get_setting(TwitchSettings.settings.disk_cache)
+	_cache_path = TwitchSettings.get_setting(TwitchSettings.settings.disk_cache_path)

@@ -1,24 +1,29 @@
+class_name TwitchAuthServer
+
 extends Node
 
 signal OnTokenReceived(token: String)
-var SERVER_IDENTITY = 'AUTH_SERVER'
 
+var SERVER_IDENTITY = 'AUTH_SERVER'
 var TOKEN_KEY = 'token'
 var AUTHENTICATION_REDIRECT_FILE_PATH = 'res://addons/very-simple-twitch/public/index.html'
 
 var _clients: Array[StreamPeerTCP] = []
 var _server: TCPServer
 
+
 func start_server(port: int):
 	_server = TCPServer.new()
 	_server.listen(port)
 	print("Server started")
+
 
 func stop_server():
 	if _server:
 		_server.stop()
 	_server = null
 	print("Server stopped")
+
 
 func _process(_delta: float) -> void:
 	if !_server:
@@ -51,6 +56,7 @@ func _process(_delta: float) -> void:
 				# handle token extraction
 				handlePost(client, url)
 
+
 func handlePost(client: StreamPeer, url: String):
 	var urlSplitted = url.split('?')
 	var query = urlSplitted[1]
@@ -62,9 +68,11 @@ func handlePost(client: StreamPeer, url: String):
 	stop_server()
 	queue_free()
 
+
 func handleGet(client: StreamPeer):
 	var pageAsString = loadLoginPage()
 	send200(client, pageAsString)
+
 
 func getTokenFromQuery(query: String):
 	var queryKeyValues = query.split('&')
@@ -74,6 +82,7 @@ func getTokenFromQuery(query: String):
 		if key == TOKEN_KEY:
 			return splittedKeyValue[1]
 
+
 func send200(client: StreamPeer, data: String = "", content_type: String = "text/html"):
 	var dataAsBuffer = data.to_ascii_buffer()
 	client.put_data(("HTTP/1.1 %d %s\r\n" % [200, 'OK']).to_ascii_buffer())
@@ -82,6 +91,7 @@ func send200(client: StreamPeer, data: String = "", content_type: String = "text
 	client.put_data("Connection: close\r\n".to_ascii_buffer())
 	client.put_data(("Content-Type: %s\r\n\r\n" % content_type).to_ascii_buffer())
 	client.put_data(dataAsBuffer)
+
 
 func loadLoginPage():
 	var file = FileAccess.open(AUTHENTICATION_REDIRECT_FILE_PATH, FileAccess.READ)
