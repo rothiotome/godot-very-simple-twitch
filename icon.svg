@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226.33 239.76">
+  <defs>
+    <style>
+      .e {
+        fill: #77428c;
+      }
+
+      .e, .f, .g {
+        stroke-width: 0px;
+      }
+
+      .f {
+        fill: #ccdaf1;
+      }
+
+      .g {
+        fill: #d07cb1;
+      }
+    </style>
+  </defs>
+  <g id="a" data-name="Capa 5">
+    <polyline class="f" points="36.32 20.75 36.32 170.28 81.05 170.28 81.05 201.4 112.17 170.28 169.24 170.28 205.58 133.94 205.58 20.75"/>
+  </g>
+  <g id="b" data-name="Capa 2">
+    <rect class="e" x="98.77" y="111.66" width="20.76" height="40"/>
+    <rect class="e" x="135.17" y="111.66" width="20.76" height="40"/>
+    <rect class="g" x="62.75" y="111.66" width="20" height="20"/>
+    <rect class="g" x="171.94" y="111.66" width="20" height="20"/>
+  </g>
+  <g id="c" data-name="Capa 6">
+    <g>
+      <path class="e" d="m62.75,94v-48.75h17.87v32.5l5.95-5.14v-27.36h17.88v37.93l-11.92,10.82h-29.79Z"/>
+      <path class="e" d="m111.01,94v-13.54h23.82v-5.41h-23.82v-18.96l11.9-10.84h29.8v13.55h-23.84v5.41h23.84v18.96l-11.92,10.82h-29.79Z"/>
+      <path class="e" d="m171.17,94l-11.9-10.82V31.71h17.87v13.54h14.9v16.25h-14.9v16.25h14.9v16.25h-20.87Z"/>
+    </g>
+  </g>
+  <g id="d" data-name="Capa 1">
+    <path class="e" d="m15.57,0L0,40.52v166.08h55.07v33.16h31.16l31.13-33.16h46.7l62.28-62.26V0H15.57Zm20.75,20.75h169.26v113.19l-36.34,36.34h-57.08l-31.12,31.12v-31.12h-44.73V20.75Z"/>
+  </g>
+</svg>
