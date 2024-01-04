@@ -16,13 +16,6 @@ const settings: Dictionary = {
 		"is_basic": false,
 		"initial_value": "user://very-simple-chat/cache",
 	},
-	"use_anon_connection": {
-		"path": "config/use_anon_connection",
-		"type": TYPE_BOOL,
-		"hint_string": "Use anon connection to connect the Twitch Chat. Only read chat scopes can be used with this connection",
-		"is_basic": true,
-		"initial_value": false,
-	},
 	"disk_cache": {
 		"path": "config/disk_cache",
 		"type": TYPE_BOOL,

@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://yhuh0huitds8"]
+
+[ext_resource type="Script" path="res://example/ChatContainer.gd" id="2_f56i7"]
+
+[node name="TwitchChat" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_f56i7")
+
+[node name="Chat" type="Panel" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Chat"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChatMessageContainer" type="VBoxContainer" parent="Chat/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

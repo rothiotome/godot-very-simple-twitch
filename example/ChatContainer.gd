@@ -6,6 +6,9 @@ var msg_node: PackedScene = preload("res://example/ChatMessage.tscn")
 @onready var scroll_container = $Chat/ScrollContainer
 @onready var chat_message_container = $Chat/ScrollContainer/ChatMessageContainer
 
+func _ready():
+	VerySimpleTwitch.chat_message_received.connect(create_chatter_msg)
+
 func create_chatter_msg(chatter: Chatter):
 	var msg: ChatMessage = msg_node.instantiate()
 	
@@ -24,7 +27,8 @@ func get_badges(chatter: Chatter) -> String:
 	var badges:= ""
 	for badge in chatter.tags.badges:
 		var result = await VerySimpleTwitch.get_badge(badge, chatter.tags.badges[badge], chatter.tags.user_id) 
-		badges += "[img=center]" + result.resource_path + "[/img] "
+		if result:
+			badges += "[img=center]" + result.resource_path + "[/img] "
 	return badges
 	
 func add_emotes(chatter: Chatter):

@@ -27,9 +27,10 @@ var _client_id: String
 var _twitch_chat_url: String
 var _twitch_chat_port: int
 
-var _use_anon_connection: bool
 var _use_cache: bool
 var _cache_path: String
+
+var _use_anon_connection:= false
 
 const USER_AGENT : String = "User-Agent: VSTC/0.1.0 (Godot Engine)"
 
@@ -53,15 +54,25 @@ func _process(_delta: float):
 				print('Disconnected from twitch chat')
 				print("WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
 				print("Reconnecting")
-				start_chat_client(_channel)
+				start_chat_client()
 
-func start_chat_client(channel: TwitchChannel):
+func start_chat_client():
 	get_settings()
-	_channel = channel
 	if _chatClient:
 		_chatClient.close()
 	_chatClient = WebSocketPeer.new()
 	_chatClient.connect_to_url("%s:%d" % [_twitch_chat_url, _twitch_chat_port])
+
+
+func login_anon(channel_name: String):
+	_channel = TwitchChannel.new()
+	_channel.login = channel_name.to_lower()
+	_use_anon_connection = true
+	start_chat_client()
+
+func login(twitch_channel: TwitchChannel):
+	_channel = twitch_channel
+	start_chat_client()
 
 func onChatConnected():
 	if !_channel:
@@ -81,20 +92,21 @@ func onChatConnected():
 	_chatClient.send_text('JOIN ' + '#' + _channel.login.to_lower())
 	OnSucess.emit()
 
+
 func onReceivedData(payload: PackedByteArray):
 	var message = payload.get_string_from_utf8()
-	handle_message(message)
-
-func send(message):
-	pass
+	var splittled_messages = message.split("\n")
+	for n in splittled_messages:
+		handle_message(n)
 		
 func handle_message(message: String):
 	if message.begins_with("PING"):
-		send(message.replace("PING", "PONG"))
-		#pong.emit()
+		_chatClient.send_text(message.replace("PING", "PONG"))
 		return
 
 	var parsed_message: PackedStringArray = message.split(" ", true, 4) # We might need more than 3
+	
+	if parsed_message.size() < 2: return
 
 	match parsed_message[2]:
 		"NOTICE":
@@ -111,11 +123,16 @@ func handle_message(message: String):
 				#unhandled_message.emit(message, tags)
 		"001":
 			print_debug("Authentication successful.")
+			_chatClient.send_text('ROOMSTATE '+ '#' + _channel.login.to_lower())
 			#login_attempt.emit(true)
 		"PRIVMSG":
 			handle_privmsg(parsed_message)
 			#handle_command(sender_data, msg[3].split(" ", true, 1))
 			#chat_message.emit(sender_data, msg[3].right(-1))
+		"ROOMSTATE":
+			if _use_anon_connection:
+				var parsed_tags:IRCTags = TwitchParseHelper.parse_tags(parsed_message[0])
+				_channel.id = parsed_tags.user_id
 
 func handle_privmsg(msg: PackedStringArray):
 	var chatter = Chatter.new()
@@ -158,6 +175,8 @@ func get_emote(emote_id: String, scale: String = "1.0") -> Texture2D:
 	return caches[RequestType.EMOTE][cachename]
 
 func get_badge(badge_name: String, badge_level: String, channel_id: String = "_global", scale: String = "1") -> Texture2D:
+	if _use_anon_connection: return
+	
 	var texture: Texture2D
 	var cachename = badge_name + "_" + badge_level + "_" + scale
 	var filename: String = _cache_path + "/" + RequestType.keys()[RequestType.BADGE] + "/" + channel_id + "/" + cachename + ".png"
@@ -235,6 +254,5 @@ func get_settings():
 	_client_id = TwitchSettings.get_setting(TwitchSettings.settings.client_id)
 	_twitch_chat_url = TwitchSettings.get_setting(TwitchSettings.settings.twitch_chat_url)
 	_twitch_chat_port = TwitchSettings.get_setting(TwitchSettings.settings.twitch_port)
-	_use_anon_connection = TwitchSettings.get_setting(TwitchSettings.settings.use_anon_connection)
 	_use_cache = TwitchSettings.get_setting(TwitchSettings.settings.disk_cache)
 	_cache_path = TwitchSettings.get_setting(TwitchSettings.settings.disk_cache_path)
