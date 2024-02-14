@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://bo1un8cwcrpqr"]
+
+[ext_resource type="Script" path="res://addons/very-simple-twitch/chat/vst_chat_dock_line.gd" id="1_h0lnd"]
+
+[node name="VstChatDockLine" type="HBoxContainer"]
+offset_right = 1.0
+offset_bottom = 115.0
+size_flags_horizontal = 3
+script = ExtResource("1_h0lnd")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
