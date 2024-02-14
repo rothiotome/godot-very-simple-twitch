@@ -48,22 +48,33 @@ var disconnect_button:Button:
 		return disconnect_button
 	
 func _on_button_pressed():
-	twitch_chat.OnSucess.connect(onChatConnected)
+	twitch_chat.OnSucess.connect(on_chat_connected)
 	twitch_chat.OnMessage.connect(create_chatter_msg)
-	twitch_chat.OnFailure.connect(onError)
+	twitch_chat.OnFailure.connect(on_error)
 	
 	twitch_chat.login_anon(channel_line_edit.text)
 	connect_button.disabled = true
 	channel_line_edit.editable = false
 
+func _on_clear_button_pressed():
+	clear_all_messages()
+	
 func _on_line_edit_text_changed(new_text):
 	connect_button.disabled = len(new_text) == 0
 
-func onChatConnected():
-	create_system_msg("Connected to Chat")
+func _on_disconnect_button_pressed():
+	# TODO: Ok, It's too much removing the node and placing another. Change it when logout method is available
+	twitch_chat.queue_free()
+	twitch_chat = null
+	
+	clear_all_messages()
+	show_connect_layout()
+	
+func on_chat_connected():
+	create_system_msg("Connected to chat")
 	show_chat_layout()
 
-func onError():
+func on_error():
 	create_system_msg("Failed to connect into chat")
 	connect_button.disabled = false
 	channel_line_edit.editable = true
@@ -73,7 +84,6 @@ func create_system_msg(message: String):
 	msg.set_chatter_string("[i]"+message+"[/i]")
 	chat_layout.add_child(msg)
 	check_scroll()
-
 
 func create_chatter_msg(chatter: Chatter):
 	var msg = line.instantiate()
@@ -129,34 +139,9 @@ func is_scroll_bottom() -> bool:
 func escape_bbcode(bbcode_text) -> String:
 	return bbcode_text.replace("[", "[lb]")
 
-class EmoteLocation extends RefCounted:
-	var id : String
-	var start : int
-	var end : int
-
-	func _init(emote_id, start_idx, end_idx):
-		self.id = emote_id
-		self.start = start_idx
-		self.end = end_idx
-
-	static func smaller(a: EmoteLocation, b: EmoteLocation):
-		return a.start < b.start
-
-
-func _on_clear_button_pressed():
-	clear_all_messages()
-
 func clear_all_messages():
 	for childen in chat_layout.get_children():
 		chat_layout.remove_child(childen)
-
-func _on_disconnect_button_pressed():
-	# TODO: Ok, It's too much removing the node and placing another. Change it when logout method is available
-	twitch_chat.queue_free()
-	twitch_chat = null
-	
-	clear_all_messages()
-	show_connect_layout()
 
 func show_chat_layout():
 	disconnect_button.visible = true
@@ -171,4 +156,16 @@ func show_connect_layout():
 	channel_line_edit.visible = true
 	connect_button.visible = true
 	connect_button.disabled = false
-	
+
+class EmoteLocation extends RefCounted:
+	var id : String
+	var start : int
+	var end : int
+
+	func _init(emote_id, start_idx, end_idx):
+		self.id = emote_id
+		self.start = start_idx
+		self.end = end_idx
+
+	static func smaller(a: EmoteLocation, b: EmoteLocation):
+		return a.start < b.start

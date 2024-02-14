@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://m77ohpfa7qef"]
 
-[ext_resource type="Script" path="res://addons/very-simple-twitch/chat/vst_chat_dock.gd" id="1_vxn3l"]
+[ext_resource type="Script" path="res://addons/very-simple-twitch/dock/vst-dock.gd" id="1_kyfdh"]
 
 [node name="vst-dock" type="Control"]
 layout_mode = 3
@@ -9,7 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_vxn3l")
+script = ExtResource("1_kyfdh")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
