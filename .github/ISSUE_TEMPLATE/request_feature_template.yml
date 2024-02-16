@@ -1,0 +1,32 @@
+name: Feature request
+description: Request a new feature for VST
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to complete this feature request!
+  - type: textarea
+    id: description-feature
+    attributes:
+      label: Description
+      description: Please describe the feature and why this will be usefull for the project
+      placeholder: I think is usefull add some sparks at clicking. Sparks are nice :)
+    validations:
+      required: true
+  - type: textarea
+    id: current-feature
+    attributes:
+      label: Current Behavior
+      description: What is the current behavior?
+      placeholder: There is no feedback and sometimes is not clear if an action is happened
+    validations:
+      required: false
+  - type: textarea
+    id: how-feature
+    attributes:
+      label: How
+      description: Describe with your own words (if you can) how can this be archieved for you or another contributor :)
+      placeholder: Use magic
+    validations:
+      required: false
