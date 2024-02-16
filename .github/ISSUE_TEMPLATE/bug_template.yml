@@ -1,0 +1,67 @@
+name: Bug report
+description: Report a problem you encountered
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to complete this bug report!
+  - type: input
+    id: project
+    attributes:
+      label: Project Version
+      description: Which project version is affected?
+      placeholder: "0.1, 1.0, 2.0.0"
+    validations:
+      required: true
+  - type: input
+    id: existing-issues
+    attributes:
+      label: Similar Issues
+      description: Are there any similar issues reported yet?
+      placeholder: "#1"
+    validations:
+      required: false
+  - type: textarea
+    id: what-is-going-on
+    attributes:
+      label: What is the issue?
+      description: Please add some information about the issue ( usefull for discursions )
+      placeholder: I found the id of menu is misspelled as manu
+    validations:
+      required: true
+  - type: textarea
+    id: repro-steps
+    attributes:
+      label: Steps to reproduce
+      value: |
+        1. 
+        2. 
+        3. 
+        ...
+    validations:
+      required: true
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: Current behavior
+      description: What should have happened?
+      placeholder: I tap on menu button and nothing happened
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: What should have happened?
+      placeholder: If I tap on menu button I expect see the menu opened
+    validations:
+      required: true
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Failure logs or additional information
+      description: Please include code snippets, stack traces or compiler errors here.
+      placeholder: Paste code snippets, stack traces, and compiler errors here
+    validations:
+      required: false
