@@ -1,0 +1,23 @@
+name: Create release
+
+on:
+  push:
+    tags: 
+      - v[0-9]+.[0-9]+.*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Zip Folder
+      run: zip -r ${{ github.event.repository.name }}.zip -r --include="./addons/*" .
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ${{ github.event.repository.name }}.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
