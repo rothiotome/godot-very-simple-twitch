@@ -58,6 +58,13 @@ const settings: Dictionary = {
 		"is_basic": false,
 		"initial_value": "kappa",
 	},
+	"twitch_timeout_ms":{
+		"path": "advanced_config/twitch_timeout_ms",
+		"type:": TYPE_INT,
+		"hint_string": "Time between messages sent by the client",
+		"is_basic": false,
+		"initial_value": 320,
+	}
 }
 
 static func add_settings():

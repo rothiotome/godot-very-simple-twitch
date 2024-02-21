@@ -33,6 +33,10 @@ var _cache_path: String
 
 var _use_anon_connection:= false
 
+var _chat_queue : Array[String] = []
+var _last_msg : int = Time.get_ticks_msec()
+var _chat_timeout_ms: int
+
 const USER_AGENT : String = "User-Agent: VSTC/0.1.0 (Godot Engine)"
 
 func _process(_delta: float):
@@ -47,6 +51,9 @@ func _process(_delta: float):
 				onChatConnected()
 			while _chatClient.get_available_packet_count():
 				onReceivedData(_chatClient.get_packet())
+			if !_chat_queue.is_empty() and _last_msg + (_last_msg + _chat_timeout_ms) <= Time.get_ticks_msec():
+				_chatClient.send_text(_chat_queue.pop_front())
+				_last_msg = Time.get_ticks_msec()
 		WebSocketPeer.STATE_CLOSED:
 			if _hasConnected:
 				_hasConnected = false
@@ -71,9 +78,11 @@ func login_anon(channel_name: String):
 	_use_anon_connection = true
 	start_chat_client()
 
+
 func login(twitch_channel: TwitchChannel):
 	_channel = twitch_channel
 	start_chat_client()
+
 
 func onChatConnected():
 	if !_channel:
@@ -93,6 +102,8 @@ func onChatConnected():
 	_chatClient.send_text('JOIN ' + '#' + _channel.login.to_lower())
 	OnSucess.emit()
 
+func send_message(message: String):
+	_chat_queue.append("PRIVMSG #" + _channel.login.to_lower() + " :" + message + "\r\n")
 
 func onReceivedData(payload: PackedByteArray):
 	var message = payload.get_string_from_utf8()
@@ -257,3 +268,4 @@ func get_settings():
 	_twitch_chat_port = TwitchSettings.get_setting(TwitchSettings.settings.twitch_port)
 	_use_cache = TwitchSettings.get_setting(TwitchSettings.settings.disk_cache)
 	_cache_path = TwitchSettings.get_setting(TwitchSettings.settings.disk_cache_path)
+	_chat_timeout_ms = TwitchSettings.get_setting(TwitchSettings.settings.twitch_timeout_ms)

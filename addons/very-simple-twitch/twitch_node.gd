@@ -61,6 +61,8 @@ func timeout():
 func remove_timeout():
 	pass
 
+func send_chat_message(message: String):
+	_twitch_chat.send_message(message)
 
 func on_chat_message_received(chatter: Chatter):
 	chat_message_received.emit(chatter)

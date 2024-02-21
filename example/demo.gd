@@ -8,3 +8,6 @@ func login_token():
 
 func get_token():
 	VerySimpleTwitch.get_token()
+
+func send_message():
+	VerySimpleTwitch.send_chat_message("Hello world")
