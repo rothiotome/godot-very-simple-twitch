@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226.33 239.76">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226.33 239.76" width="226.33" height="239.76">
   <defs>
     <style>
       .e {
         fill: #77428c;
-      }
-
-      .e, .f, .g {
-        stroke-width: 0px;
       }
 
       .f {
