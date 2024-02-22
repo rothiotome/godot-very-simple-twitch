@@ -22,7 +22,7 @@ A very simple plugin to connect your Godot games to the Twitch chat. It's possib
 		- [Features](#features)
 		- [Modifications](#modifications)
 - [FAQ and Troubleshooting](#faq-and-troubleshooting)
-    - [Change Settings](#change-settings)
+	- [Change Settings](#change-settings)
 - [License](#license)
 
 ## How to install
@@ -62,10 +62,10 @@ VerySimpleTwitch.get_token_and_login()
 To receive the Twitch chat messages, connect the `chat_message_received` signal from VerySimpleTwitch. The signal contains all the information available from the chatter, including display_name, badges, tags and colors.
 ```
 func _ready():
-    VerySimpleTwitch.chat_message_received.connect(print_chatter_msg)
+	VerySimpleTwitch.chat_message_received.connect(print_chatter_msg)
 
 func print_chatter_message(chatter: Chatter):
-    print("Message received from %s: %s % [chatter.tags.display_name, escape_bbcode(chatter.message)])
+	print("Message received from %s: %s % [chatter.tags.display_name, escape_bbcode(chatter.message)])
 ```
 
 ### How to send chat messages
@@ -97,7 +97,7 @@ Just add the plugin as always. Navigate to Project -> Plugins -> Very simple twi
 ####  Modifications
 You can change the amount of messages saved by changing **MAX_MESSAGES** constant located at *addons/very-simple-twtich/chat/vst_chat_dock.gd*
 
-Also you can change the dock scenes and the line message. The  files are *vst_chat_dock* and *vst_chat_dock_line* located in the chat folder ATM just be carefull with the node paths :)
+Also you can change the dock scenes and the line message. The  files are *vst_chat_dock* and *vst_chat_dock_line* located in the chat folder. ATM just be carefull with the node paths :)
 
 ## FAQ and Troubleshooting
 ### Change Settings
