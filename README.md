@@ -10,12 +10,17 @@ A very simple plugin to connect your Godot games to the Twitch chat. It's possib
 ## Table of contents
 - [How to install](#how-to-install)
 - [How to use](#how-to-use)
-    - [Login](#how-to-login)
-        - [Simple annonymous connection](#simple-anonymous-connection)
-        - [Get Token and login to channel](#get-token-and-login-to-channel)
-    - [Receive chat messages](#how-to-receive-chat-messages)
-    - [Send chat messages](#how-to-send-chat-messages)
-- [Editor Dock](#editor-dock)
+	- [Login](#how-to-login)
+		- [Simple annonymous connection](#simple-anonymous-connection)
+		- [Get Token and login to channel](#get-token-and-login-to-channel)
+	- [Receive chat messages](#how-to-receive-chat-messages)
+	- [Send chat messages](#how-to-send-chat-messages)
+- [Editor Docks](#editor-docks)
+	- [Very Simple Twitch](#very-simple-twitch)
+	- [VstChatDock](#vst-chat-dock)
+		- [Usage](#usage)
+		- [Features](#features)
+		- [Modifications](#modifications)
 - [FAQ and Troubleshooting](#faq-and-troubleshooting)
     - [Change Settings](#change-settings)
 - [License](#license)
@@ -35,8 +40,8 @@ To verify the installation is correct:
 
 ## How to Use
 
-## How to Login
-### Simple anonymous connection
+### How to Login
+#### Simple anonymous connection
 This is the easiest way to use the plugin. You can use ``VerySimpleTwitch.login_chat_anon("channel_name")`` to connect to the channel without needing a token or any settings customization.
 
 ```
@@ -45,7 +50,7 @@ var channel_name: String = "channel_name"
 VerySimpleTwitch.login_chat_anon(channel_name)
 ```
 
-### Get Token and login to channel
+#### Get Token and login to channel
 You can use ``VerySimpleTwitch.get_token_and_login_chat()`` to retrieve the token and automatically login to the 
 ```
 VerySimpleTwitch.get_token_and_login()
@@ -53,7 +58,7 @@ VerySimpleTwitch.get_token_and_login()
 
 > Note: You will need to set up the CLIENT_ID in the Settings tab and configure the Twitch app accordingly.
 
-## How to receive chat messages
+### How to receive chat messages
 To receive the Twitch chat messages, connect the `chat_message_received` signal from VerySimpleTwitch. The signal contains all the information available from the chatter, including display_name, badges, tags and colors.
 ```
 func _ready():
@@ -63,10 +68,36 @@ func print_chatter_message(chatter: Chatter):
     print("Message received from %s: %s % [chatter.tags.display_name, escape_bbcode(chatter.message)])
 ```
 
-## How to send chat messages
+### How to send chat messages
 To send chat messages you can use the ``VerySimpleTwitch.send_chat_message("Hello world")`` static method. Sending chat messages is only available when you use OAuth connection method with a Token that has writting permissions.
 
-## Editor Dock
+## Editor Docks
+Godot Very Simple Twitch count among the tools two docks. One located at the bottom panel called *Very Simple Twitch* and one at the right called *VSTChatDock*. Each one is used for a specific feature:
+
+* Very Simple Twitch (**WIP**) -> Is used primary for change the settings 
+* VSTChatDock -> Used as a test connection with twitch and a twitch channel.  All the messages from channel are displayed as the example but in the editor ;)
+
+### Very Simple Twitch
+WIP
+
+### VST Chat Dock 
+As it's metioned above VST Chat Dock is a connection to twitch channel chat where all the messages are displayed in the editor. This is usefull for testing proposes to your project because you can see easily what and when you are getting the messages. 
+
+If you are a godot streamer, you can read you community at the same window you code.
+
+####  Usage
+
+Just add the plugin as always. Navigate to Project -> Plugins -> Very simple twitch chat -> Enable and see at the right dock a new tab with the name "VstChatDock". Write the name of a channel and click connect. The messages will show as soon as the plugin will connect.
+
+####  Features
+-   The chat is ONLY in anonymous mode, so you don't need any token or something like that. Only the name of the channel
+-   There is a limit for saved messages. By default are 50 messages
+-   You can wipe all chat messages
+
+####  Modifications
+You can change the amount of messages saved by changing **MAX_MESSAGES** constant located at *addons/very-simple-twtich/chat/vst_chat_dock.gd*
+
+Also you can change the dock scenes and the line message. The  files are *vst_chat_dock* and *vst_chat_dock_line* located in the chat folder ATM just be carefull with the node paths :)
 
 ## FAQ and Troubleshooting
 ### Change Settings
