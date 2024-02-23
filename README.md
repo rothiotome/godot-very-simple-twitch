@@ -40,8 +40,8 @@ To verify the installation is correct:
 
 ## How to Use
 
-### How to Login
-#### Simple anonymous connection
+## How to Login
+### Simple anonymous connection
 This is the easiest way to use the plugin. You can use ``VerySimpleTwitch.login_chat_anon("channel_name")`` to connect to the channel without needing a token or any settings customization.
 
 ```
@@ -50,7 +50,7 @@ var channel_name: String = "channel_name"
 VerySimpleTwitch.login_chat_anon(channel_name)
 ```
 
-#### Get Token and login to channel
+### Get Token and login to channel
 You can use ``VerySimpleTwitch.get_token_and_login_chat()`` to retrieve the token and automatically login to the 
 ```
 VerySimpleTwitch.get_token_and_login()
@@ -58,7 +58,7 @@ VerySimpleTwitch.get_token_and_login()
 
 > Note: You will need to set up the CLIENT_ID in the Settings tab and configure the Twitch app accordingly.
 
-### How to receive chat messages
+## How to receive chat messages
 To receive the Twitch chat messages, connect the `chat_message_received` signal from VerySimpleTwitch. The signal contains all the information available from the chatter, including display_name, badges, tags and colors.
 ```
 func _ready():
@@ -68,7 +68,7 @@ func print_chatter_message(chatter: Chatter):
 	print("Message received from %s: %s % [chatter.tags.display_name, escape_bbcode(chatter.message)])
 ```
 
-### How to send chat messages
+## How to send chat messages
 To send chat messages you can use the ``VerySimpleTwitch.send_chat_message("Hello world")`` static method. Sending chat messages is only available when you use OAuth connection method with a Token that has writting permissions.
 
 ## Editor Docks
