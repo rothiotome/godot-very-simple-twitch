@@ -72,32 +72,29 @@ func print_chatter_message(chatter: Chatter):
 To send chat messages you can use the ``VerySimpleTwitch.send_chat_message("Hello world")`` static method. Sending chat messages is only available when you use OAuth connection method with a Token that has writting permissions.
 
 ## Editor Docks
-Godot Very Simple Twitch count among the tools two docks. One located at the bottom panel called *Very Simple Twitch* and one at the right called *VSTChatDock*. Each one is used for a specific feature:
+Godot Very Simple Twitch has two docks. One at the bottom called Very Simple Twitch and one at the right called VSTChatDock. Each is used for a specific function:
 
-* Very Simple Twitch (**WIP**) -> Is used primary for change the settings 
-* VSTChatDock -> Used as a test connection with twitch and a twitch channel.  All the messages from channel are displayed as the example but in the editor ;)
+* Very Simple Twitch (**WIP**) -> Used primarily for changing settings.
+* VSTChatDock -> Used as a test connection with Twitch and one Twitch channel. All messages from the channel are displayed in the editor ;)
 
 ### Very Simple Twitch
 WIP
 
 ### VST Chat Dock 
-As it's metioned above VST Chat Dock is a connection to twitch channel chat where all the messages are displayed in the editor. This is usefull for testing proposes to your project because you can see easily what and when you are getting the messages. 
+As mentioned above, VST Chat Dock is a connection to the Twitch channel chat where all messages are displayed in the editor. This is useful for testing your project as it allows you to easily visualize what and when you are getting the messages. 
 
-If you are a godot streamer, you can read you community at the same window you code.
+If you are a Godot streamer, you can read your chat in the same window you are coding in.
 
 ####  Usage
 
-Just add the plugin as always. Navigate to Project -> Plugins -> Very simple twitch chat -> Enable and see at the right dock a new tab with the name "VstChatDock". Write the name of a channel and click connect. The messages will show as soon as the plugin will connect.
+Just add and activate the plugin as explained in the installation instructions, install the plugin as usual and you'll see a new tab in the right dock named "VstChatDock". Type in the name of a channel and click connect. You will see the messages as soon as the plugin connects.
+
 
 ####  Features
--   The chat is ONLY in anonymous mode, so you don't need any token or something like that. Only the name of the channel
--   There is a limit for saved messages. By default are 50 messages
--   You can wipe all chat messages
+-   The chat works ONLY in anonymous mode, so you don't need any authorization token, just the channel name.
+-   There is a limit for saved messages. Default is 50 messages, but it can be changed in the editor settings (TBI)
+-   You can delete all chat messages
 
-####  Modifications
-You can change the amount of messages saved by changing **MAX_MESSAGES** constant located at *addons/very-simple-twtich/chat/vst_chat_dock.gd*
-
-Also you can change the dock scenes and the line message. The  files are *vst_chat_dock* and *vst_chat_dock_line* located in the chat folder. ATM just be carefull with the node paths :)
 
 ## FAQ and Troubleshooting
 ### Change Settings
