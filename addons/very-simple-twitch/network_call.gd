@@ -1,3 +1,4 @@
+@tool
 class_name Network_Call extends Node
 
 var url : String
@@ -70,21 +71,24 @@ func _compile_url(host: String, params_to_pile: Dictionary) -> String:
 		final_url += "&%s=%s" % [key_safe, value_safe]
 	return final_url
 
-func launch_request():
+func launch_request(parent: Node):
+	parent.add_child(self)
 	var data_error = check_request_data()
 	if data_error != "":
-		var error = VST_Error.new(VST_Error.VST_Code_Error.PARAM_ERROR, data_error)
+		var error:VST_Error = VST_Error.new(VST_Error.VST_Code_Error.PARAM_ERROR, data_error)
 		on_call_fail.call(error)
 		return 
 	var client = HTTPRequest.new()
+	add_child(client)
+	await get_tree().process_frame
 	client.timeout = timeout
 	client.request_completed.connect(on_request_completed)
 	var request_error = client.request(_compile_url(url, get_params), _pile_headers(headers), method, body)
 	if request_error != OK:
-		var error = VST_Error.new(VST_Error.VST_Code_Error.PARAM_ERROR, "The request can't be archieved reason: "+str(request_error))
+		var error:VST_Error = VST_Error.new(VST_Error.VST_Code_Error.PARAM_ERROR, "The request can't be archieved reason: "+str(request_error))
 		on_call_fail.call(error)
 		return
-	add_child(client)
+	
 
 func check_request_data() -> String:
 	if timeout < 0.0:
@@ -104,11 +108,11 @@ func on_request_completed(result: int, status: int, headers: PackedStringArray, 
 	elif (status >= 400 and status < 500):
 		if on_call_fail: 
 			var info = "%s -> %s" % [str(status), body.get_string_from_utf8()]
-			var error = VST_Error.new(VST_Error.VST_Code_Error.NETWORK_ERROR, info)
+			var error:VST_Error = VST_Error.new(VST_Error.VST_Code_Error.NETWORK_ERROR, info)
 			on_call_fail.call(error)
 	elif (status >= 500):
 		if on_call_fail: 
 			var info = "%s -> %s" % [str(status), body.get_string_from_utf8()]
-			var error = VST_Error.new(VST_Error.VST_Code_Error.SERVER_ERROR, info)
+			var error:VST_Error = VST_Error.new(VST_Error.VST_Code_Error.SERVER_ERROR, info)
 			on_call_fail.call(error)
 	call_deferred("queue_free")

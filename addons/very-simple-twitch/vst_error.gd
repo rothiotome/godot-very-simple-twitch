@@ -25,3 +25,6 @@ func _get_description_from_code(error_code: VST_Code_Error) -> String:
 		_:
 			result = "Unknown error"
 	return result
+
+func _to_string():
+	return "%s %s %s" % [str(code), description, info]
