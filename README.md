@@ -39,7 +39,7 @@ To verify the installation is correct:
 ### Simple anonymous connection
 This is the easiest way to use the plugin. You can use ``VerySimpleTwitch.login_chat_anon("channel_name")`` to connect to the channel without needing a token or any settings customization.
 
-```
+```GDScript
 var channel_name: String = "channel_name"
 
 VerySimpleTwitch.login_chat_anon(channel_name)
@@ -47,7 +47,7 @@ VerySimpleTwitch.login_chat_anon(channel_name)
 
 ### Get Token and login to channel
 You can use ``VerySimpleTwitch.get_token_and_login_chat()`` to retrieve the token and automatically login to the 
-```
+```GDScript
 VerySimpleTwitch.get_token_and_login()
 ```
 
@@ -55,7 +55,7 @@ VerySimpleTwitch.get_token_and_login()
 
 ## How to receive chat messages
 To receive the Twitch chat messages, connect the `chat_message_received` signal from VerySimpleTwitch. The signal contains all the information available from the chatter, including display_name, badges, tags and colors.
-```
+```GDScript
 func _ready():
     VerySimpleTwitch.chat_message_received.connect(print_chatter_msg)
 
