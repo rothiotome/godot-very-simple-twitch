@@ -159,11 +159,7 @@ func on_request_completed(result: int, status: int, headers: PackedStringArray, 
 func read_from_cache(key:String) -> PackedByteArray:
 	var filename: String = _cache_path.path_join(key)
 	if FileAccess.file_exists(filename): # is a hit on cache?
-		print("cache hit")
-		print(str(FileAccess.get_modified_time(filename)+CACHE_TIME_IN_SECONDS))
-		print(str(Time.get_unix_time_from_system()))
 		if FileAccess.get_modified_time(filename)+CACHE_TIME_IN_SECONDS > Time.get_unix_time_from_system(): # is expired?
-			print("no expired")
 			return FileAccess.get_file_as_bytes(filename)
 	return []
 
