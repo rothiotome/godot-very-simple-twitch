@@ -4,6 +4,8 @@ extends Control
 const MAX_MESSAGES:int = 50
 var line:PackedScene = load("res://addons/very-simple-twitch/chat/vst_chat_dock_line.tscn")
 
+@onready var support_button: Button = %SupportButton
+
 var twitch_chat: TwitchChat:
 	get:
 		if twitch_chat == null:
@@ -11,41 +13,21 @@ var twitch_chat: TwitchChat:
 			add_child(twitch_chat)
 		return twitch_chat
 
-var channel_line_edit: LineEdit:
-	get:
-		if channel_line_edit == null:
-			channel_line_edit = $VBoxContainer/HBoxContainer/LineEdit
-		return channel_line_edit
+@onready var channel_line_edit: LineEdit = %ChannelLineEdit
 
-var connect_button: Button:
-	get:
-		if connect_button == null:
-			connect_button = $VBoxContainer/HBoxContainer/ConnectButton
-		return connect_button
+@onready var connect_button: Button = %ConnectButton
 	
-var chat_layout: Control:
-	get:
-		if chat_layout == null:
-			chat_layout = $VBoxContainer/VBoxContainer/Chat/ScrollContainer/ChatMessageContainer
-		return chat_layout
+@onready var chat_layout: Control = %ChatLayout
 	
-var chat_scroll:ScrollContainer:
-	get:
-		if chat_scroll == null:
-			chat_scroll = $VBoxContainer/VBoxContainer/Chat/ScrollContainer
-		return chat_scroll
+@onready var chat_scroll:ScrollContainer = %ChatScroll
 
-var clear_button:Button:
-	get:
-		if clear_button == null:
-			clear_button = $VBoxContainer/HBoxContainer/ClearButton
-		return clear_button
+@onready var clear_button:Button = %ClearButton
 
-var disconnect_button:Button:
-	get:
-		if disconnect_button == null:
-			disconnect_button = $VBoxContainer/HBoxContainer/DisconnectButton
-		return disconnect_button
+@onready var disconnect_button:Button = %DisconnectButton
+
+func _ready():
+	support_button.icon = get_theme_icon("Heart", "EditorIcons")
+	support_button.tooltip_text = "Support me on Ko-fi"
 	
 func _on_button_pressed():
 	twitch_chat.OnSucess.connect(on_chat_connected)
@@ -69,7 +51,11 @@ func _on_disconnect_button_pressed():
 	
 	clear_all_messages()
 	show_connect_layout()
-	
+
+func _on_support_button_pressed() -> void:
+	OS.shell_open("https://ko-fi.com/rothiotome?ref=VST")
+
+
 func on_chat_connected():
 	create_system_msg("Connected to chat")
 	show_chat_layout()
@@ -107,6 +93,7 @@ func check_number_messages():
 	if chat_layout.get_child_count() > MAX_MESSAGES:
 		chat_layout.remove_child(chat_layout.get_children()[0])
 
+# TODO: Can't get badges when the connection is annonymous, we should clear this method
 func get_badges(chatter: Chatter) -> String:
 	var badges:= ""
 	for badge in chatter.tags.badges:

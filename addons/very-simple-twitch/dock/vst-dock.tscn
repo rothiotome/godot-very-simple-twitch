@@ -22,6 +22,9 @@ grow_vertical = 2
 [node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
 layout_mode = 2
 focus_mode = 2
-text = "[\"moderator:manage:banned_users\", \"chat:read\", \"channel:manage:vips\"]"
 fit_content = true
 selection_enabled = true
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "SETUP"
