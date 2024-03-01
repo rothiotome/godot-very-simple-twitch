@@ -10,14 +10,14 @@ A very simple plugin to connect your Godot games to the Twitch chat. It's possib
 ## Table of contents
 - [How to install](#how-to-install)
 - [How to use](#how-to-use)
-    - [Login](#how-to-login)
-        - [Simple annonymous connection](#simple-anonymous-connection)
-        - [Get Token and login to channel](#get-token-and-login-to-channel)
-    - [Receive chat messages](#how-to-receive-chat-messages)
-    - [Send chat messages](#how-to-send-chat-messages)
+	- [Login](#how-to-login)
+		- [Simple annonymous connection](#simple-anonymous-connection)
+		- [Get Token and login to channel](#get-token-and-login-to-channel)
+	- [Receive chat messages](#how-to-receive-chat-messages)
+	- [Send chat messages](#how-to-send-chat-messages)
 - [Editor Dock](#editor-dock)
 - [FAQ and Troubleshooting](#faq-and-troubleshooting)
-    - [Change Settings](#change-settings)
+	- [Change Settings](#change-settings)
 - [License](#license)
 
 ## How to install
@@ -57,10 +57,10 @@ VerySimpleTwitch.get_token_and_login()
 To receive the Twitch chat messages, connect the `chat_message_received` signal from VerySimpleTwitch. The signal contains all the information available from the chatter, including display_name, badges, tags and colors.
 ```
 func _ready():
-    VerySimpleTwitch.chat_message_received.connect(print_chatter_msg)
+	VerySimpleTwitch.chat_message_received.connect(print_chatter_msg)
 
 func print_chatter_message(chatter: Chatter):
-    print("Message received from %s: %s % [chatter.tags.display_name, escape_bbcode(chatter.message)])
+	print("Message received from %s: %s % [chatter.tags.display_name, escape_bbcode(chatter.message)])
 ```
 
 ## How to send chat messages

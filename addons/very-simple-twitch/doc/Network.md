@@ -17,6 +17,7 @@ To use the wrapper for network requests simply construct a Network_Call object a
 * in_time(int) -> set the timeout time to the request
 * set_on_call_success (Callable) -> call that function if the request was ok (200)
 * set_on_call_fail (Callable) -> call that function if the request was fail (>400)
+* no_cache -> set no cache for request ( only used in GET requests )
 
 ## Example
 
@@ -29,3 +30,5 @@ To use the wrapper for network requests simply construct a Network_Call object a
 	func on_error(error):
 		$Label.text = "Error requesting fact about cats :("
 
+## Cache
+TBI
