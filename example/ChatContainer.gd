@@ -54,16 +54,3 @@ func is_scroll_bottom() -> bool:
 # Returns escaped BBCode that won't be parsed by RichTextLabel as tags.
 func escape_bbcode(bbcode_text):
 	return bbcode_text.replace("[", "[lb]")
-
-class EmoteLocation extends RefCounted:
-	var id : String
-	var start : int
-	var end : int
-
-	func _init(emote_id, start_idx, end_idx):
-		self.id = emote_id
-		self.start = start_idx
-		self.end = end_idx
-
-	static func smaller(a: EmoteLocation, b: EmoteLocation):
-		return a.start < b.start
