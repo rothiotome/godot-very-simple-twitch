@@ -1,4 +1,4 @@
-class_name EmoteLocation 
+class_name EmoteLocation
 
 extends RefCounted
 

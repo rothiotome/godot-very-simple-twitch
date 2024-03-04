@@ -20,7 +20,7 @@ To use the wrapper for network requests simply construct a Network_Call object a
 * no_cache -> set no cache for request ( only used in GET requests )
 
 ## Example
-
+```GDScript
 	func _onReady():
 		Network_Call.new().to("https://catfact.ninja/fact").set_on_call_success(on_cat_fact).set_on_call_fail(on_error).launch_request(self)
 	
@@ -29,6 +29,18 @@ To use the wrapper for network requests simply construct a Network_Call object a
 	
 	func on_error(error):
 		$Label.text = "Error requesting fact about cats :("
-
+```
 ## Cache
-TBI
+The network module has a cache for GET requests to save time and bandwidth for similar requests in 'short' time spans.
+
+Because nodes are ephemeral (network requests are nodes that disappear) the cache is stored on disk and not in memory (that resposability was left for the upper layers).
+
+The cache works as follows: 
+* 1. The request is hashed ( using the url ) 
+* 2. A file with that name ( the hash ) is searched on disk. 
+* 3.a If it exists and it has not passed 300 seconds ( arbitrary and improvable time using an etag? ) the request is resolved returning the content of the file. 
+* 3.b If the file does not exist or more than 300 seconds that time has elapsed the request is made and cached using the same hash.
+
+The time validity of that cache is on CACHE_TIME_IN_SECONDS constant at network_call.gd
+
+The cached content is an array of bytes due to the heterogeneous nature of the possible requests (text, images, sound...).
