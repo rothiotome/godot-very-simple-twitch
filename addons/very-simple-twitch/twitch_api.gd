@@ -48,29 +48,16 @@ func _on_auth_server_on_token_received(token) -> void:
 	_user = validated_user
 	token_received.emit(_user)
 
-func send_api_request(url: String, method: HTTPClient.Method,  body: Dictionary = {}):
-	var client = HTTPRequest.new()
-	var bodyEncoded = JSON.stringify(body)
-	add_child(client)
-	client.request(url, [
-		'Client-Id: ' + _client_id,
-		'Authorization: Bearer ' + _user.token,
-		'Content-Type: application/json'
-	], method, bodyEncoded)
-	var result = await client.request_completed
-	var status = result[1]
+func request_success(response:PackedByteArray):
+	pass
+
+func request_fail(status, error):
 	if status == 401 or status == 403:
 		#Unauthorized? No mi ciela
 		initiate_twitch_auth()
-		return
-
-	if status != 200:
-		var data = (result[3] as PackedByteArray).get_string_from_utf8()
-		print(data)
-		return false
-
-	client.queue_free()
-	return true
+	else:
+		push_warning(error)
+	pass
 
 func validate_token_and_get_user_id(token: String):
 	var client = HTTPRequest.new()
@@ -91,12 +78,11 @@ func validate_token_and_get_user_id(token: String):
 	client.queue_free()
 	return user	
 
-func timeout_user(user_to_ban_id: String, duration: int = 1, reason: String = ''):
+func timeout_user(user_to_ban_id: String, duration: int = 1, reason: String = '', on_success: Callable = Callable(), on_fail: Callable = Callable()):
 	if !_user:
 		return
 
 	var timeout_duration = max(duration, 1)
-	var url = TWITCH_BAN_URL + '?broadcaster_id=' +  _user.id + '&moderator_id=' + _user.id
 	var body = {
 		data = {
 			user_id = user_to_ban_id,
@@ -104,18 +90,45 @@ func timeout_user(user_to_ban_id: String, duration: int = 1, reason: String = ''
 			reason = reason
 		},
 	}
-	return await send_api_request(url, HTTPClient.METHOD_POST, body)
+	
+	Network_Call.new().to(TWITCH_BAN_URL).\
+	add_all_get_params({'broadcaster_id': _user.id, 
+		'moderator_id': _user.id}).\
+	with(body).\
+	verb(HTTPClient.METHOD_POST).\
+	add_all_headers({'Client-Id: ' : _client_id,
+		'Authorization': 'Bearer ' + _user.token,
+		'Content-Type': 'application/json'}).\
+	set_on_call_fail(request_fail).\
+	set_on_call_success(request_success).\
+	launch_request(self)
 
-func add_vip(user_to_vip_id: String):
+func add_vip(user_to_vip_id: String, on_success: Callable = Callable(), on_fail: Callable = Callable()):
 	if !_user:
 		return
 
-	var url = TWITCH_VIP_URL + '?broadcaster_id=' +  _user.id + '&user_id=' + user_to_vip_id
-	return await send_api_request(url, HTTPClient.METHOD_POST)
+	Network_Call.new().to(TWITCH_VIP_URL).\
+	add_all_get_params({'broadcaster_id': _user.id, 
+		'user_id': user_to_vip_id}).\
+	verb(HTTPClient.METHOD_POST).\
+	add_all_headers({'Client-Id: ' : _client_id,
+		'Authorization': 'Bearer ' + _user.token,
+		'Content-Type': 'application/json'}).\
+	set_on_call_fail(request_fail).\
+	set_on_call_success(request_success).\
+	launch_request(self)
 
-func remove_vip(user_to_vip_id: String):
+func remove_vip(user_to_remove_vip_id: String, on_success: Callable = Callable(), on_fail: Callable = Callable()):
 	if !_user:
 		return
 
-	var url = TWITCH_VIP_URL + '?broadcaster_id=' +  _user.id + '&user_id=' + user_to_vip_id
-	return await send_api_request(url, HTTPClient.METHOD_DELETE)
+	Network_Call.new().to(TWITCH_VIP_URL).\
+	add_all_get_params({'broadcaster_id': _user.id, 
+		'user_id': user_to_remove_vip_id}).\
+	verb(HTTPClient.METHOD_DELETE).\
+	add_all_headers({'Client-Id: ' : _client_id,
+		'Authorization': 'Bearer ' + _user.token,
+		'Content-Type': 'application/json'}).\
+	set_on_call_fail(request_fail).\
+	set_on_call_success(request_success).\
+	launch_request(self)

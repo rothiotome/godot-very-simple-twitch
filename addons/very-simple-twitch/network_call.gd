@@ -2,6 +2,10 @@
 class_name Network_Call extends Node
 
 const CACHE_TIME_IN_SECONDS = 300
+
+# TODO: add dynamic version here
+const USER_AGENT = {"User-Agent": "VSTC/0.1.0 (Godot Engine)"}
+
 const _cache_path = "user://very-simple-chat/cache"
 
 var url: String
@@ -82,6 +86,8 @@ func _pile_headers(headers_to_pile: Dictionary) -> PackedStringArray:
 	var array:PackedStringArray = []
 	for key in headers_to_pile:
 		array.append("%s: %s" % [key, headers_to_pile[key]])
+	for key in USER_AGENT:
+		array.append("%s: %s" % [key, USER_AGENT[key]])
 	return array
 
 
