@@ -10,14 +10,19 @@ A very simple plugin to connect your Godot games to the Twitch chat. It's possib
 ## Table of contents
 - [How to install](#how-to-install)
 - [How to use](#how-to-use)
-    - [Login](#how-to-login)
-        - [Simple annonymous connection](#simple-anonymous-connection)
-        - [Get Token and login to channel](#get-token-and-login-to-channel)
-    - [Receive chat messages](#how-to-receive-chat-messages)
-    - [Send chat messages](#how-to-send-chat-messages)
-- [Editor Dock](#editor-dock)
+	- [Login](#how-to-login)
+		- [Simple annonymous connection](#simple-anonymous-connection)
+		- [Get Token and login to channel](#get-token-and-login-to-channel)
+	- [Receive chat messages](#how-to-receive-chat-messages)
+	- [Send chat messages](#how-to-send-chat-messages)
+- [Editor Docks](#editor-docks)
+	- [Very Simple Twitch](#very-simple-twitch)
+	- [VstChatDock](#vst-chat-dock)
+		- [Usage](#usage)
+		- [Features](#features)
+		- [Modifications](#modifications)
 - [FAQ and Troubleshooting](#faq-and-troubleshooting)
-    - [Change Settings](#change-settings)
+	- [Change Settings](#change-settings)
 - [License](#license)
 
 ## How to install
@@ -57,16 +62,39 @@ VerySimpleTwitch.get_token_and_login()
 To receive the Twitch chat messages, connect the `chat_message_received` signal from VerySimpleTwitch. The signal contains all the information available from the chatter, including display_name, badges, tags and colors.
 ```GDScript
 func _ready():
-    VerySimpleTwitch.chat_message_received.connect(print_chatter_msg)
+	VerySimpleTwitch.chat_message_received.connect(print_chatter_msg)
 
 func print_chatter_message(chatter: Chatter):
-    print("Message received from %s: %s % [chatter.tags.display_name, escape_bbcode(chatter.message)])
+	print("Message received from %s: %s % [chatter.tags.display_name, escape_bbcode(chatter.message)])
 ```
 
 ## How to send chat messages
 To send chat messages you can use the ``VerySimpleTwitch.send_chat_message("Hello world")`` static method. Sending chat messages is only available when you use OAuth connection method with a Token that has writting permissions.
 
-## Editor Dock
+## Editor Docks
+Godot Very Simple Twitch has two docks. One at the bottom called Very Simple Twitch and one at the right called VSTChatDock. Each is used for a specific function:
+
+* Very Simple Twitch (**WIP**) -> Used primarily for changing settings.
+* VSTChatDock -> Used as a test connection with Twitch and one Twitch channel. All messages from the channel are displayed in the editor ;)
+
+### Very Simple Twitch
+WIP
+
+### VST Chat Dock 
+As mentioned above, VST Chat Dock is a connection to the Twitch channel chat where all messages are displayed in the editor. This is useful for testing your project as it allows you to easily visualize what and when you are getting the messages. 
+
+If you are a Godot streamer, you can read your chat in the same window you are coding in.
+
+####  Usage
+
+Just add and activate the plugin as explained in the installation instructions, install the plugin as usual and you'll see a new tab in the right dock named "VstChatDock". Type in the name of a channel and click connect. You will see the messages as soon as the plugin connects.
+
+
+####  Features
+-   The chat works ONLY in anonymous mode, so you don't need any authorization token, just the channel name.
+-   There is a limit for saved messages. Default is 50 messages, but it can be changed in the editor settings (TBI)
+-   You can delete all chat messages
+
 
 ## FAQ and Troubleshooting
 ### Change Settings
