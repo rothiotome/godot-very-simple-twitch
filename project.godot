@@ -21,4 +21,4 @@ VerySimpleTwitch="*res://addons/very-simple-twitch/twitch_node.gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/very-simple-twitch/plugin.cfg")
+enabled=PackedStringArray("res://addons/gdLinter/plugin.cfg", "res://addons/very-simple-twitch/plugin.cfg")
