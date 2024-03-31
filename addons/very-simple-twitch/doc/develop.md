@@ -29,4 +29,4 @@ GDLinter Addon Documentation -> https://github.com/el-falso/gdlinter/
 
 As soon as you install the plugin and the toolkit you will see a menu at the bottom called GDLint. There it will show the problems with the code :)
 
-![GDLint Usage](./img/gdlint-usage-1.png)
+![](img/gdlint-usage-1.png?raw=true)
