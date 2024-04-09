@@ -43,8 +43,10 @@ func test_parse_tags():
 	assert_eq(result.user_id, "156108906")
 	assert_eq(result.color_hex, "#FF666F")
 	assert_eq(result.display_name, "RothioTome")
+
 	var parsed_badges = {"broadcaster": "1", "subscriber": "0"}
 	assert_eq_deep(result.badges, parsed_badges)
+
 	var parsed_emotes = { "emotesv2_3328e0d6b6714a6a90dc8f58d09e5648": "11-24", 
 	"emotesv2_4b9a9537c7e34c3395ada46471c4097e": "26-35" }
 	assert_eq_deep(result.emotes, parsed_emotes)
