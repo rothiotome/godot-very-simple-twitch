@@ -9,6 +9,7 @@ A very simple plugin to connect your Godot games to the Twitch chat. It's possib
 
 ## Table of contents
 - [How to install](#how-to-install)
+- [Quick setup](#quick-setup)
 - [How to use](#how-to-use)
 	- [Login](#how-to-login)
 		- [Simple annonymous connection](#simple-anonymous-connection)
@@ -34,9 +35,37 @@ Godot Very Simple Twitch requires Godot 4.2 or higher. You can check the Godot v
 To verify the installation is correct:
 - The folder path ```res://addons/very-simple-twitch``` exists
 - Go to ```Project > Project Settings```
-- Click in the ```Plugins```tab
+- Click in the ``Plugins``tab
 - Enable ```Very Simple Twitch```
 - Restart Godot
+
+## Quick Setup
+In order to use Very Simple Twitch, you will need to setup a new App in the Twitch developer console and perform the following steps:
+
+1. Go to https://dev.twitch.tv/console/apps and authorize Twitch Developer to access your account.
+
+2. Click on the "Register Your Application" button.
+
+3. Name your application and set the Category to ``Game Integration`` and the OAuth Redirect URL to ``http:/localhost`` for now.
+
+4. Set your ``Client Type`` to ``Public``
+
+![twitch-dev-console-create-app](./docs/images/twitch-dev-console-create-app.png)
+
+5. Click on "Create".
+
+6. Open the Very Simple Twitch dock in the bottom of your Godot editor.
+
+7. Copy the Redirect URL addresses from the Twitch Quick Start tab to your Twitch Developer App.
+
+![redirect-uri](./docs/images/redirect-uri.png)
+
+8. Copy the generated "Client ID" from your Twitch Developer App and add it to your TwitchOAuth gameobject
+
+![client-id](./docs/images/client-id.png)
+
+
+That would be all! Everything is ready to use!
 
 ## How to Use
 
@@ -74,11 +103,8 @@ To send chat messages you can use the ``VerySimpleTwitch.send_chat_message("Hell
 ## Editor Docks
 Godot Very Simple Twitch has two docks. One at the bottom called Very Simple Twitch and one at the right called VSTChatDock. Each is used for a specific function:
 
-* Very Simple Twitch (**WIP**) -> Used primarily for changing settings.
+* Very Simple Twitch -> Used primarily for initial setup
 * VSTChatDock -> Used as a test connection with Twitch and one Twitch channel. All messages from the channel are displayed in the editor ;)
-
-### Very Simple Twitch
-WIP
 
 ### VST Chat Dock 
 As mentioned above, VST Chat Dock is a connection to the Twitch channel chat where all messages are displayed in the editor. This is useful for testing your project as it allows you to easily visualize what and when you are getting the messages. 
@@ -91,7 +117,7 @@ Just add and activate the plugin as explained in the installation instructions, 
 
 
 ####  Features
--   The chat works ONLY in anonymous mode, so you don't need any authorization token, just the channel name.
+-   The chat dock works ONLY in anonymous mode, so you don't need any authorization token, just the channel name.
 -   There is a limit for saved messages. Default is 50 messages, but it can be changed in the editor settings (TBI)
 -   You can delete all chat messages
 
