@@ -80,9 +80,9 @@ VerySimpleTwitch.login_chat_anon(channel_name)
 ```
 
 ### Get Token and login to channel
-You can use ``VerySimpleTwitch.get_token_and_login_chat()`` to retrieve the token and automatically login to the 
+You can use ``VerySimpleTwitch.get_token_and_login_chat()`` to retrieve the token and automatically login to the twitch chat
 ```GDScript
-VerySimpleTwitch.get_token_and_login()
+VerySimpleTwitch.get_token_and_login_chat()
 ```
 
 > Note: You will need to set up the CLIENT_ID in the Settings tab and configure the Twitch app accordingly.
