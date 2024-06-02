@@ -1,11 +1,11 @@
 ![Last release: 0.0.1](https://img.shields.io/badge/release-v0.0.1a-blue.png) 
-![Download in the AssetLib](https://img.shields.io/badge/AssetLib-Soon-FA5c5c?logo=godot&logoColor=FFFFFF&)
+![Download in the AssetLib](https://img.shields.io/badge/AssetLib-0.0.1-FA5c5c?logo=godot&logoColor=FFFFFF&)(https://godotengine.org/asset-library/asset/3032)
 [![Made for Godot](https://img.shields.io/badge/Godot-4.x-blue?logo=godotengine&logoColor=white)](https://godotengine.org)
 [![Under MIT license](https://img.shields.io/github/license/RothioTome/godot-very-simple-twitch)](LICENSE)
 
 ![Logo](./icon.svg)
 # Godot Very Simple Twitch
-Connect your Godot games to Twitch chat effortlessly. Login with just one line of code to read messages instantly. Includes a dock for easy Twitch developer setup, supports OIDC, and provides a simple interface for interacting with the Twitch API to write messages, timeout users, grant VIP status, and more.
+Easily connect your Godot games to Twitch chat. Log in with a single line of code to start reading messages right away. Features two docks for setting up the Twitch developer console and reading chat directly in the editor. Supports OIDC for seamless Twitch API interactions to write messages, timeout users, grant VIP status, and more.
 
 ## Table of contents
 - [How to install](#how-to-install)
