@@ -1,5 +1,5 @@
 ![Last release: 0.0.1](https://img.shields.io/badge/release-v0.0.1a-blue.png) 
-![Download in the AssetLib](https://img.shields.io/badge/AssetLib-0.0.1-FA5c5c?logo=godot&logoColor=FFFFFF&)(https://godotengine.org/asset-library/asset/3032)
+[![Download in the AssetLib](https://img.shields.io/badge/AssetLib-0.0.1-FA5c5c?logo=godot&logoColor=FFFFFF&)](https://godotengine.org/asset-library/asset/3032)
 [![Made for Godot](https://img.shields.io/badge/Godot-4.x-blue?logo=godotengine&logoColor=white)](https://godotengine.org)
 [![Under MIT license](https://img.shields.io/github/license/RothioTome/godot-very-simple-twitch)](LICENSE)
 
