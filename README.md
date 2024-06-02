@@ -5,7 +5,7 @@
 
 ![Logo](./icon.svg)
 # Godot Very Simple Twitch
-A very simple plugin to connect your Godot games to the Twitch chat. It's possible to Login with just one line of code and start reading the messages. Custom settings for different environments and more complex login methods are also supported.
+Connect your Godot games to Twitch chat effortlessly. Login with just one line of code to read messages instantly. Includes a dock for easy Twitch developer setup, supports OIDC, and provides a simple interface for interacting with the Twitch API to write messages, timeout users, grant VIP status, and more.
 
 ## Table of contents
 - [How to install](#how-to-install)
