@@ -4,6 +4,7 @@
 # need to be unchecked.
 
 * text=auto
+/addons/gdLinter export-ignore
 /.github export-ignore
 /docs export-ignore
 /.gitattributes export-ignore
