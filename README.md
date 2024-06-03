@@ -35,7 +35,7 @@ Godot Very Simple Twitch requires Godot 4.2 or higher. You can check the Godot v
 To verify the installation is correct:
 - The folder path ```res://addons/very-simple-twitch``` exists
 - Go to ```Project > Project Settings```
-- Click in the ``Plugins``tab
+- Click in the ``Plugins`` tab
 - Enable ```Very Simple Twitch```
 - Restart Godot
 
