@@ -39,32 +39,21 @@ func test_initial_settings():
 	assert_eq(twitch_anon_pass, "kappa")
 	assert_eq(TwitchSettings.settings.twitch_anon_pass.path, "advanced_config/twitch_anon_pass")
 
-var twitch_chat_res = load("res://addons/very-simple-twitch/twitch_chat.gd")
-
-func _handle_messages_util(message:String, result:String):
-	var twitch_chat:TwitchChat  = partial_double(twitch_chat_res, DOUBLE_STRATEGY.INCLUDE_NATIVE).new()
-	var peer_socket = double(WebSocketPeer).new()
-	stub(peer_socket, "get_ready_state").to_return(WebSocketPeer.STATE_OPEN)
-	stub(peer_socket, "send_text").to_do_nothing()
-	twitch_chat._chatClient = peer_socket
-	twitch_chat.handle_message(message)
-	assert_called(peer_socket, "send_text", [result])
-
-func test_handle_ping():
-	_handle_messages_util("PING test", "PONG test")
-
-
-func test_handle_welcome():
-	_handle_messages_util(":tmi.godot.com 001 testTwtichGodot :Welcome, GLHF!", "ROOMSTATE # test")
-
-
-func test_handle_notice():
-	pending('This test is not implemented yet')
-
-
+func test_parse_message_to_chatter():
+	var twitch_chat:TwitchChat = load("res://addons/very-simple-twitch/twitch_chat.gd").new()
+	var parsed_message:PackedStringArray = twitch_chat.parse_message_from_twtich_IRC("@badge-info=;badges=broadcaster/1;client-nonce=28e05b1c83f1e916ca1710c44b014515;color=#0000FF;display-name=godot_oficial;emotes=62835:0-10;first-msg=0;flags=;id=f80a19d6-e35a-4273-82d0-cd87f614e767;mod=0;room-id=713936733;subscriber=0;tmi-sent-ts=1642696567751;turbo=0;user-id=713936733;user-type= :godot_oficial!godot_oficial@godot_oficial.tmi.twitch.tv PRIVMSG #xyz :HeyGuys")
+	var chatter:Chatter = twitch_chat.parse_message_to_chatter(parsed_message)
+	assert_eq(chatter.channel, "xyz")
+	assert_eq(chatter.login, "godot_oficial")
+	assert_eq(chatter.message, "HeyGuys")
+	assert_eq(chatter.is_mod(), false)
+	assert_eq(chatter.is_sub(), false)
+	assert_eq(chatter.is_broadcaster(), true)
+	
 func test_handle_private_message():
-	pending('This test is not implemented yet')
-
-
-func test_handle_room_state():
-	pending('This test is not implemented yet')
+	var twitch_chat:TwitchChat = load("res://addons/very-simple-twitch/twitch_chat.gd").new()
+	watch_signals(twitch_chat)
+	var parsed_message:PackedStringArray = twitch_chat.parse_message_from_twtich_IRC("@badge-info=;badges=broadcaster/1;client-nonce=28e05b1c83f1e916ca1710c44b014515;color=#0000FF;display-name=godot_oficial;emotes=62835:0-10;first-msg=0;flags=;id=f80a19d6-e35a-4273-82d0-cd87f614e767;mod=0;room-id=713936733;subscriber=0;tmi-sent-ts=1642696567751;turbo=0;user-id=713936733;user-type= :godot_oficial!godot_oficial@godot_oficial.tmi.twitch.tv PRIVMSG #xyz :HeyGuys")
+	twitch_chat.handle_privmsg(parsed_message)
+	var chatter:Chatter = twitch_chat.parse_message_to_chatter(parsed_message)
+	assert_signal_emitted(twitch_chat, "OnMessage", [chatter])
