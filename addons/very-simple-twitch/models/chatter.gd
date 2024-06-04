@@ -8,12 +8,12 @@ var tags: IRCTags
 
 
 func is_mod() -> bool:
-	return tags.badges.find_key("moderator")
+	return tags.badges.has("moderator")
 
 
 func is_sub() -> bool:
-	return tags.badges.find_key("subscriber")
+	return tags.badges.has("subscriber")
 
 
 func is_broadcaster() -> bool:
-	return tags.badges.find_key("broadcaster")
+	return tags.badges.has("broadcaster")
