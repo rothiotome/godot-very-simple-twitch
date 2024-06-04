@@ -46,7 +46,7 @@ In order to use Very Simple Twitch, you will need to setup a new App in the Twit
 
 2. Click on the "Register Your Application" button.
 
-3. Name your application and set the Category to ``Game Integration`` and the OAuth Redirect URL to ``http:/localhost`` for now.
+3. Name your application and set the Category to ``Game Integration`` and the OAuth Redirect URL to ``http://localhost`` for now.
 
 4. Set your ``Client Type`` to ``Public``
 
