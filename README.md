@@ -30,7 +30,7 @@ Easily connect your Godot games to Twitch chat. Log in with a single line of cod
 Godot Very Simple Twitch requires Godot 4.2 or higher. You can check the Godot version you have installed in the bottom dock or your editor.
 - Clone the project or download last release.
 - If you cloned the project, extract the ```addons``` folder
-- Move the ```addons``` fodler to your game folder
+- Move the ```addons``` folder to your game folder
 
 To verify the installation is correct:
 - The folder path ```res://addons/very-simple-twitch``` exists
