@@ -30,7 +30,7 @@ Easily connect your Godot games to Twitch chat. Log in with a single line of cod
 Godot Very Simple Twitch requires Godot 4.2 or higher. You can check the Godot version you have installed in the bottom dock or your editor.
 - Clone the project or download last release.
 - If you cloned the project, extract the ```addons``` folder
-- Move the ```addons``` fodler to your game folder
+- Move the ```addons``` folder to your game folder
 
 To verify the installation is correct:
 - The folder path ```res://addons/very-simple-twitch``` exists
@@ -91,10 +91,10 @@ VerySimpleTwitch.get_token_and_login_chat()
 To receive the Twitch chat messages, connect the `chat_message_received` signal from VerySimpleTwitch. The signal contains all the information available from the chatter, including display_name, badges, tags and colors.
 ```GDScript
 func _ready():
-	VerySimpleTwitch.chat_message_received.connect(print_chatter_msg)
+	VerySimpleTwitch.chat_message_received.connect(print_chatter_message)
 
 func print_chatter_message(chatter: Chatter):
-	print("Message received from %s: %s % [chatter.tags.display_name, escape_bbcode(chatter.message)])
+	print("Message received from %s: %s" % [chatter.tags.display_name, chatter.message])
 ```
 
 ## How to send chat messages
