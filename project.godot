@@ -21,4 +21,8 @@ VerySimpleTwitch="*res://addons/very-simple-twitch/twitch_node.gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gdLinter/plugin.cfg", "res://addons/very-simple-twitch/plugin.cfg")
+enabled=PackedStringArray("res://addons/gdLinter/plugin.cfg", "res://addons/gut/plugin.cfg", "res://addons/very-simple-twitch/plugin.cfg")
+
+[very_simple_twitch]
+
+config/client_id="p1w4o6x2dw6qibn1ffxrvrxhcngeba"
