@@ -8,6 +8,28 @@ const settings: Dictionary = {
 		"is_basic": true,
 		"initial_value": "",
 	},
+	"redirect_host": {
+		"path": "advanced_config/redirect_host",
+		"type": TYPE_STRING,
+		"hint_string": "The host where the OAuth Callback will be received",
+		"is_basic": false,
+		"initial_value": "http://localhost:",
+	},
+	"uuid": {
+		"path": "advanced_config/uuid",
+		"type": TYPE_STRING,
+		"hint_string": "The useless UID to hide the token from the web browser",
+		"is_basic": false,
+		"initial_value": "53125396-3e32-4fad-8f7e-36475724168b-a8fe83ab-3373-4a6a-8967-2532eafe407f-41483db3-f011-4a23-80da-9a340672692a-e755c6d4-c546-43ce-b722-b5a799561b4e-5ba1697d-79b2-4d5d-96c3-f0d91f13f583-f08f18f9-bd56-4a0f-a597-96f90108cd85-14449d50-6cc9-450f-8119-ff4c525e31db-e41a6912-92a0-48b6-b6d3-845c21bea7eb-7dfd7948-2976-42cf-9cca-b23ae5854813-107224eb-81ea-46dd-9bf5-9ebbfcfc45dc/",
+	},
+	"redirect_port": {
+		"path": "config/redirect_port",
+		"type": TYPE_INT,
+		"hint_string": "The port where the oauth callback will be redirect",
+		"is_basic": true,
+		"initial_value": 8090,
+	},
+	
 	"disk_cache_path": {
 		"path": "advanced_config/disk_cache_path",
 		"type": TYPE_STRING,

@@ -20,4 +20,4 @@ jobs:
       with:
         files: ${{ github.event.repository.name }}.zip
       env:
-        GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}

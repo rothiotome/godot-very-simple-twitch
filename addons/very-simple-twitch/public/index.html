@@ -1,20 +1,26 @@
 <!DOCTYPE html>
+<html>
 <head>
   <meta http-equiv='cache-control' content='no-cache'>
   <meta http-equiv='expires' content='0'>
   <meta http-equiv='pragma' content='no-cache'>
 </head>
 
+<body>
+
+
+<h1 id="title">Login...</h1>
+
 <script>
   (async () => {
     const AUTH_URL = 'http://localhost:8090';
-
-    const hashKeyValue = location.hash.replace('#', '').split('&');
+    const hashKeyValue = location.hash.replace('#', '&').split('&');
     const tokenKeyValue = hashKeyValue.find((item) => item.split('=')[0] === 'access_token');
     const token = tokenKeyValue.split('=')[1];
-    await fetch(AUTH_URL + `?token=${token}`, { method: 'POST' });
-    window.close();
+    fetch(AUTH_URL + `?token=${token}`, { method: 'POST' }).then((e) => {document.getElementById("title").innerHTML = "Everything seems to be OK. You can close this window.";} ).catch((error) => {document.getElementById("title").innerHTML = "ERROR: "+JSON.stringify(error);});
+
   })();
 </script>
 
-<h1>Login...</h1>
+</body>
+</html>

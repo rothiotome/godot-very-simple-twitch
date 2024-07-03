@@ -4,9 +4,6 @@ extends Node
 
 signal token_received(TwitchChannel)
 
-const TWITCH_REDIRECT_HOST = "http://localhost:"
-
-const USELESS_UUID = "53125396-3e32-4fad-8f7e-36475724168b-a8fe83ab-3373-4a6a-8967-2532eafe407f-41483db3-f011-4a23-80da-9a340672692a-e755c6d4-c546-43ce-b722-b5a799561b4e-5ba1697d-79b2-4d5d-96c3-f0d91f13f583-f08f18f9-bd56-4a0f-a597-96f90108cd85-14449d50-6cc9-450f-8119-ff4c525e31db-e41a6912-92a0-48b6-b6d3-845c21bea7eb-7dfd7948-2976-42cf-9cca-b23ae5854813-107224eb-81ea-46dd-9bf5-9ebbfcfc45dc/"
 
 const RESPONSE_TYPE = 'token'
 
@@ -17,7 +14,6 @@ const TWITCH_VIP_URL = "https://api.twitch.tv/helix/channels/vips"
 const TWITCH_SETTINGS_URL = "https://api.twitch.tv/helix/chat/settings"
 const TWITCH_CHATTERS_URL = "https://api.twitch.tv/helix/chat/chatters"
 
-var free_port:int = 8090
 
 var _scopes: PackedStringArray
 var _client_id: String
@@ -27,13 +23,17 @@ var _user: TwitchChannel
 func initiate_twitch_auth():
 	_scopes = TwitchSettings.get_setting(TwitchSettings.settings.scopes)
 	_client_id = TwitchSettings.get_setting(TwitchSettings.settings.client_id)
+	var redirect_host = TwitchSettings.get_setting(TwitchSettings.settings.redirect_host)
+	var redirect_port = TwitchSettings.get_setting(TwitchSettings.settings.redirect_port)
+	var uuid = TwitchSettings.get_setting(TwitchSettings.settings.uuid)
+
 	var auth_server = TwitchAuthServer.new()
 	add_child(auth_server)
 	auth_server.OnTokenReceived.connect(_on_auth_server_on_token_received)
 	auth_server.stop_server()
-	auth_server.start_server(8090)
+	auth_server.start_server(redirect_port)
 
-	var redirect_uri = TWITCH_REDIRECT_HOST + str(free_port) + "/" + USELESS_UUID
+	var redirect_uri = redirect_host + str(redirect_port) + "/" + uuid
 	var scopes_string = "+".join(_scopes)
 	var url = "client_id=" + _client_id + "&redirect_uri=" + redirect_uri + "&response_type=" + RESPONSE_TYPE + "&scope=" + scopes_string
 
