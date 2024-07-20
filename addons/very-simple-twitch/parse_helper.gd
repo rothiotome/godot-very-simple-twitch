@@ -25,7 +25,7 @@ static func parse_tags(input_string:String) -> IRCTags:
 
 		if splitted_tag.size() <= 1: continue
 
-		match(splitted_tag[0]):
+		match(splitted_tag[0].strip_edges()):
 			"badges":
 				irc_tags.badges = parse_badges(splitted_tag[1].split(","))
 			"color":
