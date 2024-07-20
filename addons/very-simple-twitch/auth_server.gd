@@ -22,7 +22,6 @@ func stop_server():
 	if _server:
 		_server.stop()
 	_server = null
-	print("Server stopped")
 
 
 func _process(_delta: float) -> void:
@@ -58,7 +57,9 @@ func _process(_delta: float) -> void:
 
 
 func handlePost(client: StreamPeer, url: String):
-	var urlSplitted = url.split('?')
+	var urlSplitted:PackedStringArray = url.split('?')
+	if (len(urlSplitted) == 1):
+		return
 	var query = urlSplitted[1]
 	var token = getTokenFromQuery(query)
 	if !token:
@@ -93,7 +94,7 @@ func send200(client: StreamPeer, data: String = "", content_type: String = "text
 	client.put_data(dataAsBuffer)
 
 
-func loadLoginPage():
+func loadLoginPage() -> String:
 	var file = FileAccess.open(AUTHENTICATION_REDIRECT_FILE_PATH, FileAccess.READ)
 	var loadedFile: String = file.get_as_text()
 	file.close()
