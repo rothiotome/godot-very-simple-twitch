@@ -149,7 +149,7 @@ func handle_message(message: String):
 				var parsed_tags:VSTIRCTags = VSTParseHelper.parse_tags(parsed_message[0])
 				_channel.id = parsed_tags.user_id
 
-func parse_message_to_chatter(message: PackedStringArray) -> Chatter:
+func parse_message_to_chatter(message: PackedStringArray) -> VSTChatter:
 	var chatter = VSTChatter.new()
 	chatter.login = VSTParseHelper.parse_login(message[1])
 	chatter.channel = VSTParseHelper.parse_channel(message[3])
@@ -158,7 +158,7 @@ func parse_message_to_chatter(message: PackedStringArray) -> Chatter:
 	chatter.date_time_dict = Time.get_datetime_dict_from_system()
 	
 	if chatter.tags.color_hex.is_empty():
-		chatter.tags.color_hex = TwitchUtils.get_random_name_color(chatter.login)
+		chatter.tags.color_hex = VSTUtils.get_random_name_color(chatter.login)
 	return chatter
 
 

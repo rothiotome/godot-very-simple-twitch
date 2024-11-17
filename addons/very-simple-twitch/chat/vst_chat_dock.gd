@@ -5,10 +5,10 @@ const MAX_MESSAGES:int = 50
 var line:PackedScene = load("res://addons/very-simple-twitch/chat/vst_chat_dock_line.tscn")
 
 
-var twitch_chat: TwitchChat:
+var twitch_chat: VSTChat:
 	get:
 		if twitch_chat == null:
-			twitch_chat = TwitchChat.new()
+			twitch_chat = VSTChat.new()
 			add_child(twitch_chat)
 		return twitch_chat
 
@@ -71,7 +71,7 @@ func create_system_msg(message: String):
 	chat_layout.add_child(msg)
 	check_scroll()
 
-func create_chatter_msg(chatter: Chatter):
+func create_chatter_msg(chatter: VSTChatter):
 	var msg = line.instantiate()
 
 	var badges: String = await get_badges(chatter)
@@ -94,7 +94,7 @@ func check_number_messages():
 		chat_layout.remove_child(chat_layout.get_children()[0])
 
 # TODO: Can't get badges when the connection is annonymous, we should clear this method
-func get_badges(chatter: Chatter) -> String:
+func get_badges(chatter: VSTChatter) -> String:
 	var badges:= ""
 	for badge in chatter.tags.badges:
 		var result = await twitch_chat.get_badge(badge, chatter.tags.badges[badge], chatter.tags.user_id)
@@ -102,16 +102,16 @@ func get_badges(chatter: Chatter) -> String:
 			badges += "[img=center]" + result.resource_path + "[/img] "
 	return badges
 
-func add_emotes(chatter: Chatter):
+func add_emotes(chatter: VSTChatter):
 	if chatter.tags.emotes.is_empty(): return
 
 	var locations: Array = []
 	for emote in chatter.tags.emotes:
 		for data in chatter.tags.emotes[emote].split(","):
 			var start_end = data.split("-")
-			locations.append(EmoteLocation.new(emote, int(start_end[0]), int(start_end[1])))
+			locations.append(VSTEmoteLocation.new(emote, int(start_end[0]), int(start_end[1])))
 
-	locations.sort_custom(Callable(EmoteLocation, "smaller"))
+	locations.sort_custom(Callable(VSTEmoteLocation, "smaller"))
 	var offset = 0
 	for loc in locations:
 		var result = await twitch_chat.get_emote(loc.id)

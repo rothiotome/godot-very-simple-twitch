@@ -23,14 +23,14 @@ func get_token_and_login_chat():
 
 func _start_chat_client():
 	if !_twitch_chat:
-		_twitch_chat = TwitchChat.new()
+		_twitch_chat = VSTChat.new()
 		add_child(_twitch_chat)
 		_twitch_chat.OnMessage.connect(on_chat_message_received)
 
 
 func get_token() -> VSTChannel:
 	if !_twitch_api:
-		_twitch_api = TwitchAPI.new()
+		_twitch_api = VSTAPI.new()
 		add_child(_twitch_api)
 		_twitch_api.initiate_twitch_auth()
 	var channel_info = await _twitch_api.token_received

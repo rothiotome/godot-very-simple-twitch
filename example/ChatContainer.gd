@@ -7,8 +7,8 @@ var msg_node: PackedScene = preload("res://example/ChatMessage.tscn")
 func _ready():
 	VerySimpleTwitch.chat_message_received.connect(create_chatter_msg)
 
-func create_chatter_msg(chatter: Chatter):
-	var msg: ChatMessage = msg_node.instantiate()
+func create_chatter_msg(chatter: VSTChatter):
+	var msg: VSTChatMessage = msg_node.instantiate()
 
 	var badges: String = await get_badges(chatter)
 	chatter.message = escape_bbcode(chatter.message)
@@ -21,7 +21,7 @@ func create_chatter_msg(chatter: Chatter):
 	await get_tree().process_frame
 	if bottom: scroll_container.scroll_vertical = scroll_container.get_v_scroll_bar().max_value
 
-func get_badges(chatter: Chatter) -> String:
+func get_badges(chatter: VSTChatter) -> String:
 	var badges:= ""
 	for badge in chatter.tags.badges:
 		var result = await VerySimpleTwitch.get_badge(badge, \
@@ -30,16 +30,16 @@ func get_badges(chatter: Chatter) -> String:
 			badges += "[img=center]" + result.resource_path + "[/img] "
 	return badges
 
-func add_emotes(chatter: Chatter):
+func add_emotes(chatter: VSTChatter):
 	if chatter.tags.emotes.is_empty(): return
 
 	var locations: Array = []
 	for emote in chatter.tags.emotes:
 		for data in chatter.tags.emotes[emote].split(","):
 			var start_end = data.split("-")
-			locations.append(EmoteLocation.new(emote, int(start_end[0]), int(start_end[1])))
+			locations.append(VSTEmoteLocation.new(emote, int(start_end[0]), int(start_end[1])))
 
-	locations.sort_custom(Callable(EmoteLocation, "smaller"))
+	locations.sort_custom(Callable(VSTEmoteLocation, "smaller"))
 	var offset = 0
 	for loc in locations:
 		var result = await VerySimpleTwitch.get_emote(loc.id)
