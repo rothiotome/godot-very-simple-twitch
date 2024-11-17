@@ -109,13 +109,17 @@ func onReceivedData(payload: PackedByteArray):
 	var splittled_messages = message.split("\n")
 	for n in splittled_messages:
 		handle_message(n)
-		
+
+#TODO: move this to parse helper?
+func parse_message_from_twtich_IRC(message: String) -> PackedStringArray:
+	return message.split(" ", true, 4) # We might need more than 3
+	
 func handle_message(message: String):
 	if message.begins_with("PING"):
 		_chatClient.send_text(message.replace("PING", "PONG"))
 		return
 
-	var parsed_message: PackedStringArray = message.split(" ", true, 4) # We might need more than 3
+	var parsed_message: PackedStringArray = parse_message_from_twtich_IRC(message)
 	
 	if parsed_message.size() < 2: return
 
@@ -145,18 +149,23 @@ func handle_message(message: String):
 				var parsed_tags:VSTIRCTags = VSTParseHelper.parse_tags(parsed_message[0])
 				_channel.id = parsed_tags.user_id
 
-func handle_privmsg(msg: PackedStringArray):
+func parse_message_to_chatter(message: PackedStringArray) -> Chatter:
 	var chatter = VSTChatter.new()
-	chatter.login = VSTParseHelper.parse_login(msg[1])
-	chatter.channel = VSTParseHelper.parse_channel(msg[3])
-	chatter.message = VSTParseHelper.parse_message(msg[4])
-	chatter.tags = VSTParseHelper.parse_tags(msg[0])
+	chatter.login = VSTParseHelper.parse_login(message[1])
+	chatter.channel = VSTParseHelper.parse_channel(message[3])
+	chatter.message = VSTParseHelper.parse_message(message[4])
+	chatter.tags = VSTParseHelper.parse_tags(message[0])
 	chatter.date_time_dict = Time.get_datetime_dict_from_system()
 	
 	if chatter.tags.color_hex.is_empty():
-		chatter.tags.color_hex = VSTUtils.get_random_name_color(chatter.login)
-		
+		chatter.tags.color_hex = TwitchUtils.get_random_name_color(chatter.login)
+	return chatter
+
+
+func handle_privmsg(msg: PackedStringArray):
+	var chatter = parse_message_to_chatter(msg)
 	OnMessage.emit(chatter)
+
 
 func get_emote(emote_id: String, scale: String = "1.0") -> Texture2D:
 	var texture: Texture2D

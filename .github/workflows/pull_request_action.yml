@@ -1,0 +1,28 @@
+name: Pull request test
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Tests
+      uses: croconut/godot-tester@v5
+      with:
+        # required
+        version: "4.2.1"
+        release_type: "stable"
+        is-mono: "true"
+        import-time: "5"
+        test-timeout: "45"
+        minimum-pass: "1"
+        test-dir: "res://test"
+        # default is false, set true to count asserts instead of tests
+        assert-check: "true" 
+        max-fails: 1  

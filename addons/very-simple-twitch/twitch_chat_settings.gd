@@ -93,13 +93,15 @@ static func add_settings():
 	for setting in settings:
 		var setting_value = settings[setting]
 		var path = "very_simple_twitch/"+ setting_value.get("path", "config" +setting)
-		ProjectSettings.set_setting(path, setting_value.get("initial_value"))
+		var saved_value = ProjectSettings.get_setting(path)
+		if !saved_value:
+			ProjectSettings.set_setting(path, setting_value.get("initial_value"))
 		var property_info = {
 			"name": path,
 			"type": setting_value.get("type",  typeof(setting_value.get("initial_value"))),
 			"hint": setting_value.get("hint"),
 			"hint_string": setting_value.get("hint_string", "")
-	}
+		}
 		ProjectSettings.set_as_basic(path,  setting_value.get("is_basic", true))
 		ProjectSettings.set_initial_value(path, setting_value.get("initial_value"))
 		ProjectSettings.add_property_info(property_info)
