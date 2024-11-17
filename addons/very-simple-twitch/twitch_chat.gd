@@ -1,13 +1,12 @@
 @tool
-extends Node
 
-class_name TwitchChat
+class_name VSTChat extends Node
 
 signal OnSucess
-signal OnMessage(chatter: Chatter)
+signal OnMessage(chatter: VSTChatter)
 signal OnFailure(reason: String)
 
-var _channel: TwitchChannel
+var _channel: VSTChannel
 
 var _chatClient: WebSocketPeer
 var _hasConnected:= false
@@ -73,13 +72,13 @@ func start_chat_client():
 
 
 func login_anon(channel_name: String):
-	_channel = TwitchChannel.new()
+	_channel = VSTChannel.new()
 	_channel.login = channel_name.to_lower()
 	_use_anon_connection = true
 	start_chat_client()
 
 
-func login(twitch_channel: TwitchChannel):
+func login(twitch_channel: VSTChannel):
 	_channel = twitch_channel
 	start_chat_client()
 
@@ -92,8 +91,8 @@ func onChatConnected():
 	_chatClient.send_text("CAP REQ :twitch.tv/tags twitch.tv/commands")
 	
 	if _use_anon_connection:
-		_chatClient.send_text('PASS ' + TwitchSettings.get_setting(TwitchSettings.settings.twitch_anon_pass))
-		_chatClient.send_text('NICK ' + TwitchSettings.get_setting(TwitchSettings.settings.twitch_anon_user))
+		_chatClient.send_text('PASS ' + VSTSettings.get_setting(VSTSettings.settings.twitch_anon_pass))
+		_chatClient.send_text('NICK ' + VSTSettings.get_setting(VSTSettings.settings.twitch_anon_user))
 	else:
 		_chatClient.send_text('PASS oauth:' + _channel.token)
 		_chatClient.send_text('NICK ' + _channel.login.to_lower())
@@ -143,19 +142,19 @@ func handle_message(message: String):
 			#chat_message.emit(sender_data, msg[3].right(-1))
 		"ROOMSTATE":
 			if _use_anon_connection:
-				var parsed_tags:IRCTags = TwitchParseHelper.parse_tags(parsed_message[0])
+				var parsed_tags:VSTIRCTags = VSTParseHelper.parse_tags(parsed_message[0])
 				_channel.id = parsed_tags.user_id
 
 func handle_privmsg(msg: PackedStringArray):
-	var chatter = Chatter.new()
-	chatter.login = TwitchParseHelper.parse_login(msg[1])
-	chatter.channel = TwitchParseHelper.parse_channel(msg[3])
-	chatter.message = TwitchParseHelper.parse_message(msg[4])
-	chatter.tags = TwitchParseHelper.parse_tags(msg[0])
+	var chatter = VSTChatter.new()
+	chatter.login = VSTParseHelper.parse_login(msg[1])
+	chatter.channel = VSTParseHelper.parse_channel(msg[3])
+	chatter.message = VSTParseHelper.parse_message(msg[4])
+	chatter.tags = VSTParseHelper.parse_tags(msg[0])
 	chatter.date_time_dict = Time.get_datetime_dict_from_system()
 	
 	if chatter.tags.color_hex.is_empty():
-		chatter.tags.color_hex = TwitchUtils.get_random_name_color(chatter.login)
+		chatter.tags.color_hex = VSTUtils.get_random_name_color(chatter.login)
 		
 	OnMessage.emit(chatter)
 
@@ -263,9 +262,9 @@ func get_badge_mapping(channel_id: String = "_global") -> Dictionary:
 	return caches[RequestType.BADGE_MAPPING][channel_id]
 
 func get_settings():
-	_client_id = TwitchSettings.get_setting(TwitchSettings.settings.client_id)
-	_twitch_chat_url = TwitchSettings.get_setting(TwitchSettings.settings.twitch_chat_url)
-	_twitch_chat_port = TwitchSettings.get_setting(TwitchSettings.settings.twitch_port)
-	_use_cache = TwitchSettings.get_setting(TwitchSettings.settings.disk_cache)
-	_cache_path = TwitchSettings.get_setting(TwitchSettings.settings.disk_cache_path)
-	_chat_timeout_ms = TwitchSettings.get_setting(TwitchSettings.settings.twitch_timeout_ms)
+	_client_id = VSTSettings.get_setting(VSTSettings.settings.client_id)
+	_twitch_chat_url = VSTSettings.get_setting(VSTSettings.settings.twitch_chat_url)
+	_twitch_chat_port = VSTSettings.get_setting(VSTSettings.settings.twitch_port)
+	_use_cache = VSTSettings.get_setting(VSTSettings.settings.disk_cache)
+	_cache_path = VSTSettings.get_setting(VSTSettings.settings.disk_cache_path)
+	_chat_timeout_ms = VSTSettings.get_setting(VSTSettings.settings.twitch_timeout_ms)

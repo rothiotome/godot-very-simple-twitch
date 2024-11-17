@@ -1,4 +1,4 @@
-class_name TwitchUtils
+class_name VSTUtils
 
 const LUMINANCE_LOW := 0.2
 const LUMINANCE_HIGH := 0.8

@@ -28,10 +28,10 @@ func on_visibility_changed():
 
 
 func update_visuals():
-	var client_id = TwitchSettings.get_setting(TwitchSettings.settings.client_id)
-	var redirect_host = TwitchSettings.get_setting(TwitchSettings.settings.redirect_host)
-	var redirect_port = TwitchSettings.get_setting(TwitchSettings.settings.redirect_port)
-	var uuid = TwitchSettings.get_setting(TwitchSettings.settings.uuid)
+	var client_id = VSTSettings.get_setting(VSTSettings.settings.client_id)
+	var redirect_host = VSTSettings.get_setting(VSTSettings.settings.redirect_host)
+	var redirect_port = VSTSettings.get_setting(VSTSettings.settings.redirect_port)
+	var uuid = VSTSettings.get_setting(VSTSettings.settings.uuid)
 		
 	redirect_uri.text = redirect_host + str(redirect_port) + "/" + uuid
 	client_id_line_edit.text = client_id
@@ -48,7 +48,7 @@ func copy_redirect_uri():
 
 
 func client_id_submitted():
-	ProjectSettings.set_setting("very_simple_twitch/"+TwitchSettings.settings.client_id.path, client_id_line_edit.text)
+	ProjectSettings.set_setting("very_simple_twitch/"+VSTSettings.settings.client_id.path, client_id_line_edit.text)
 	ProjectSettings.save()
 	
 

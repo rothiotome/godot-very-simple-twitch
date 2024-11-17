@@ -1,10 +1,10 @@
-class_name Chatter
+class_name VSTChatter
 
 var date_time_dict: Dictionary
 var login: String
 var channel: String
 var message: String
-var tags: IRCTags
+var tags: VSTIRCTags
 
 
 func is_mod() -> bool:

@@ -1,5 +1,5 @@
 @tool
-class_name Network_Call extends Node
+class_name VSTNetwork_Call extends Node
 
 const CACHE_TIME_IN_SECONDS = 300
 
@@ -26,59 +26,59 @@ func _init():
 	use_cache = true
 
 
-func to(url_request: String) -> Network_Call:
+func to(url_request: String) -> VSTNetwork_Call:
 	url = url_request
 	return self
 
 
-func with(body_object) -> Network_Call:
+func with(body_object) -> VSTNetwork_Call:
 	body = JSON.stringify(body_object)
 	return self
 
 
-func in_time(timeout_request: float) -> Network_Call:
+func in_time(timeout_request: float) -> VSTNetwork_Call:
 	timeout = timeout_request
 	return self
 
 
-func verb(method_request: HTTPClient.Method) -> Network_Call:
+func verb(method_request: HTTPClient.Method) -> VSTNetwork_Call:
 	method = method_request
 	return self
 
 
-func no_cache() -> Network_Call:
+func no_cache() -> VSTNetwork_Call:
 	use_cache = false
 	return self
 
 
-func add_header(key_header: String, value_header: String) -> Network_Call:
+func add_header(key_header: String, value_header: String) -> VSTNetwork_Call:
 	headers[key_header] = value_header
 	return self
 
 
-func add_all_headers(headers_dic: Dictionary) -> Network_Call:
+func add_all_headers(headers_dic: Dictionary) -> VSTNetwork_Call:
 	for key in headers_dic:
 		headers[key] = headers_dic[key]
 	return self
 
 
-func add_get_param(key_get_param:String, value_get_param) -> Network_Call:
+func add_get_param(key_get_param:String, value_get_param) -> VSTNetwork_Call:
 	get_params[key_get_param] = str(value_get_param)
 	return self
 
 
-func add_all_get_params(get_params_dic: Dictionary) -> Network_Call:
+func add_all_get_params(get_params_dic: Dictionary) -> VSTNetwork_Call:
 	for key in get_params_dic:
 		get_params[key] = get_params_dic[key]
 	return self
 
 
-func set_on_call_success(on_call_success_request: Callable) -> Network_Call:
+func set_on_call_success(on_call_success_request: Callable) -> VSTNetwork_Call:
 	on_call_success = on_call_success_request
 	return self
 
 
-func set_on_call_fail(on_call_fail_request: Callable) -> Network_Call:
+func set_on_call_fail(on_call_fail_request: Callable) -> VSTNetwork_Call:
 	on_call_fail = on_call_fail_request
 	return self
 

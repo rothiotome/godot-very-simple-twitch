@@ -1,4 +1,4 @@
-class_name EmoteLocation
+class_name VSTEmoteLocation
 
 extends RefCounted
 
@@ -11,5 +11,5 @@ func _init(emote_id, start_idx, end_idx):
 	self.start = start_idx
 	self.end = end_idx
 
-static func smaller(a: EmoteLocation, b: EmoteLocation):
+static func smaller(a: VSTEmoteLocation, b: VSTEmoteLocation):
 	return a.start < b.start

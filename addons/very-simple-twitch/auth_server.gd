@@ -1,4 +1,4 @@
-class_name TwitchAuthServer
+class_name VSTAuthServer
 
 extends Node
 

@@ -1,4 +1,4 @@
-class_name IRCTags
+class_name VSTIRCTags
 
 var color_hex: String
 var display_name: String

@@ -10,7 +10,7 @@ func _enter_tree() -> void:
 	
 	add_autoload_singleton("VerySimpleTwitch", "twitch_node.gd")
 	
-	TwitchSettings.add_settings()
+	VSTSettings.add_settings()
 	
 	#Bottom setup dock
 	dock = preload("res://addons/very-simple-twitch/dock/vst-dock.tscn").instantiate()
@@ -25,7 +25,7 @@ func _exit_tree() -> void:
 	remove_custom_type("VerySimpleTwitchChat")
 	remove_custom_type("VerySimpleTwitchAPI")
 	
-	TwitchSettings.remove_settings()
+	VSTSettings.remove_settings()
 	
 	remove_autoload_singleton("VerySimpleTwitch")
 	

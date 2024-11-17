@@ -1,4 +1,4 @@
-class_name TwitchParseHelper
+class_name VSTParseHelper
 
 static func parse_login(input_string:String) -> String:
 	return get_substring(input_string, ":", "!")
@@ -12,8 +12,8 @@ static func parse_message(input_string:String) -> String:
 	return input_string.trim_prefix(":").strip_edges()
 
 
-static func parse_tags(input_string:String) -> IRCTags:
-	var irc_tags = IRCTags.new()
+static func parse_tags(input_string:String) -> VSTIRCTags:
+	var irc_tags = VSTIRCTags.new()
 	var tags:PackedStringArray = input_string.split(";")
 	
 	for i in len(tags):

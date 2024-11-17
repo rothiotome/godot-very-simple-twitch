@@ -1,4 +1,4 @@
-class_name TwitchSettings
+class_name VSTSettings
 
 const settings: Dictionary = {
 	"client_id": {

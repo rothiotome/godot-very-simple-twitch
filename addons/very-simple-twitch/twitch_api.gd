@@ -1,4 +1,4 @@
-class_name TwitchAPI
+class_name VSTAPI
 
 extends Node
 
@@ -18,16 +18,16 @@ const TWITCH_CHATTERS_URL = "https://api.twitch.tv/helix/chat/chatters"
 var _scopes: PackedStringArray
 var _client_id: String
 
-var _user: TwitchChannel
+var _user: VSTChannel
 
 func initiate_twitch_auth():
-	_scopes = TwitchSettings.get_setting(TwitchSettings.settings.scopes)
-	_client_id = TwitchSettings.get_setting(TwitchSettings.settings.client_id)
-	var redirect_host = TwitchSettings.get_setting(TwitchSettings.settings.redirect_host)
-	var redirect_port = TwitchSettings.get_setting(TwitchSettings.settings.redirect_port)
-	var uuid = TwitchSettings.get_setting(TwitchSettings.settings.uuid)
+	_scopes = VSTSettings.get_setting(VSTSettings.settings.scopes)
+	_client_id = VSTSettings.get_setting(VSTSettings.settings.client_id)
+	var redirect_host = VSTSettings.get_setting(VSTSettings.settings.redirect_host)
+	var redirect_port = VSTSettings.get_setting(VSTSettings.settings.redirect_port)
+	var uuid = VSTSettings.get_setting(VSTSettings.settings.uuid)
 
-	var auth_server = TwitchAuthServer.new()
+	var auth_server = VSTAuthServer.new()
 	add_child(auth_server)
 	auth_server.OnTokenReceived.connect(_on_auth_server_on_token_received)
 	auth_server.stop_server()
@@ -69,7 +69,7 @@ func validate_token_and_get_user_id(token: String):
 		return null
 	var data = (result[3] as PackedByteArray).get_string_from_utf8()
 	var data_parsed = JSON.parse_string(data)
-	var user = TwitchChannel.new()
+	var user = VSTChannel.new()
 	user.id = data_parsed['user_id']
 	user.login = data_parsed['login']
 	user.token = token
@@ -89,7 +89,7 @@ func timeout_user(user_to_ban_id: String, duration: int = 1, reason: String = ''
 		},
 	}
 
-	Network_Call.new().to(TWITCH_BAN_URL).\
+	VSTNetwork_Call.new().to(TWITCH_BAN_URL).\
 	add_all_get_params({'broadcaster_id': _user.id,
 		'moderator_id': _user.id}).\
 	with(body).\
@@ -105,7 +105,7 @@ func add_vip(user_to_vip_id: String, on_success: Callable = Callable(), on_fail:
 	if !_user:
 		return
 
-	Network_Call.new().to(TWITCH_VIP_URL).\
+	VSTNetwork_Call.new().to(TWITCH_VIP_URL).\
 	add_all_get_params({'broadcaster_id': _user.id,
 		'user_id': user_to_vip_id}).\
 	verb(HTTPClient.METHOD_POST).\
@@ -120,7 +120,7 @@ func remove_vip(user_to_remove_vip_id: String, on_success: Callable = Callable()
 	if !_user:
 		return
 
-	Network_Call.new().to(TWITCH_VIP_URL).\
+	VSTNetwork_Call.new().to(TWITCH_VIP_URL).\
 	add_all_get_params({'broadcaster_id': _user.id,
 		'user_id': user_to_remove_vip_id}).\
 	verb(HTTPClient.METHOD_DELETE).\
