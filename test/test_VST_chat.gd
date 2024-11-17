@@ -3,39 +3,39 @@ extends GutTest
 var server:VSTAuthServer
 
 func test_initial_settings():
-	var client_id = VSTSettings.get_setting(VSTSettings.settings.client_id)
+	var client_id:String = VSTSettings.get_setting(VSTSettings.settings.client_id)
 	assert_eq(client_id, "") # no initial value
 	assert_eq(VSTSettings.settings.client_id.path, "config/client_id")
 	
-	var twitch_chat_url = VSTSettings.get_setting(VSTSettings.settings.twitch_chat_url)
+	var twitch_chat_url:String = VSTSettings.get_setting(VSTSettings.settings.twitch_chat_url)
 	assert_eq(twitch_chat_url, "wss://irc-ws.chat.twitch.tv")
 	assert_eq(VSTSettings.settings.twitch_chat_url.path, "advanced_config/twitch_chat_url")
 	
-	var twitch_chat_port = VSTSettings.get_setting(VSTSettings.settings.twitch_port)
+	var twitch_chat_port:int = VSTSettings.get_setting(VSTSettings.settings.twitch_port)
 	assert_eq(twitch_chat_port, 443)
 	assert_eq(VSTSettings.settings.twitch_port.path, "advanced_config/twitch_port")
 	
-	var use_cache = VSTSettings.get_setting(VSTSettings.settings.disk_cache)
+	var use_cache:bool = VSTSettings.get_setting(VSTSettings.settings.disk_cache)
 	assert_eq(use_cache, true)
 	assert_eq(VSTSettings.settings.disk_cache.path, "config/disk_cache")
 	
-	var cache_path = VSTSettings.get_setting(VSTSettings.settings.disk_cache_path)
+	var cache_path:String = VSTSettings.get_setting(VSTSettings.settings.disk_cache_path)
 	assert_eq(cache_path, "user://very-simple-chat/cache")
 	assert_eq(VSTSettings.settings.disk_cache_path.path, "advanced_config/disk_cache_path")
 	
-	var chat_timeout_ms = VSTSettings.get_setting(VSTSettings.settings.twitch_timeout_ms)
+	var chat_timeout_ms:int = VSTSettings.get_setting(VSTSettings.settings.twitch_timeout_ms)
 	assert_eq(chat_timeout_ms, 320)
 	assert_eq(VSTSettings.settings.twitch_timeout_ms.path, "advanced_config/twitch_timeout_ms")
 	
-	var scopes = VSTSettings.get_setting(VSTSettings.settings.scopes)
+	var scopes:Array = VSTSettings.get_setting(VSTSettings.settings.scopes)
 	assert_eq_deep(scopes, ["moderator:manage:banned_users","chat:read", "channel:manage:vips"])
 	assert_eq(VSTSettings.settings.scopes.path, "config/scopes")
 	
-	var twitch_anon_user = VSTSettings.get_setting(VSTSettings.settings.twitch_anon_user)
+	var twitch_anon_user:String = VSTSettings.get_setting(VSTSettings.settings.twitch_anon_user)
 	assert_eq(twitch_anon_user, "justinfan5555")
 	assert_eq(VSTSettings.settings.twitch_anon_user.path, "advanced_config/twitch_anon_user")
 	
-	var twitch_anon_pass = VSTSettings.get_setting(VSTSettings.settings.twitch_anon_pass)
+	var twitch_anon_pass:String = VSTSettings.get_setting(VSTSettings.settings.twitch_anon_pass)
 	assert_eq(twitch_anon_pass, "kappa")
 	assert_eq(VSTSettings.settings.twitch_anon_pass.path, "advanced_config/twitch_anon_pass")
 
