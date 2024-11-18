@@ -3,6 +3,7 @@ extends Node
 
 class_name TwitchChat
 
+# TODO: rename to past simple?
 signal OnSucess
 signal OnMessage(chatter: Chatter)
 signal OnFailure(reason: String)
@@ -280,3 +281,10 @@ func get_settings():
 	_use_cache = TwitchSettings.get_setting(TwitchSettings.settings.disk_cache)
 	_cache_path = TwitchSettings.get_setting(TwitchSettings.settings.disk_cache_path)
 	_chat_timeout_ms = TwitchSettings.get_setting(TwitchSettings.settings.twitch_timeout_ms)
+
+# stops chat socket from tts server
+func _disconnect():
+	if _chatClient:
+		_chatClient.close()
+	
+	_hasConnected = false
