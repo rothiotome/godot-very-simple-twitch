@@ -13,24 +13,24 @@ func test_get_random_name_color():
 
 
 func test_normalize_color():
-	var color_dark = Color.BLACK
-	var color_dark_normalized = VSTUtils.normalize_color(color_dark)
-	var color_light = Color.WHITE
-	var color_light_normalized = VSTUtils.normalize_color(color_light)
-	var color_normal = Color.LIGHT_CORAL
-	var color_normal_normalized = VSTUtils.normalize_color(color_normal)
+	var color_dark:Color = Color.BLACK
+	var color_dark_normalized:Color = VSTUtils.normalize_color(color_dark)
+	var color_light:Color = Color.WHITE
+	var color_light_normalized:Color = VSTUtils.normalize_color(color_light)
+	var color_normal:Color = Color.LIGHT_CORAL
+	var color_normal_normalized:Color = VSTUtils.normalize_color(color_normal)
 	assert_eq(color_normal_normalized, Color.LIGHT_CORAL)
 	assert_eq(color_light_normalized, Color(0.8, 0.8, 0.8, 1))
 	assert_eq(color_dark_normalized, Color(0.2, 0.2, 0.2, 1))
 
 
 func test_normalize_color_str():
-	var color_dark = Color.BLACK
-	var color_dark_normalized = VSTUtils.normalize_hex_color(color_dark.to_html())
-	var color_light = Color.WHITE
-	var color_light_normalized = VSTUtils.normalize_hex_color(color_light.to_html())
-	var color_normal = Color.LIGHT_CORAL
-	var color_normal_normalized = VSTUtils.normalize_hex_color(color_normal.to_html())
+	var color_dark:Color = Color.BLACK
+	var color_dark_normalized:Color = VSTUtils.normalize_hex_color(color_dark.to_html())
+	var color_light:Color = Color.WHITE
+	var color_light_normalized:Color = VSTUtils.normalize_hex_color(color_light.to_html())
+	var color_normal:Color = Color.LIGHT_CORAL
+	var color_normal_normalized:Color = VSTUtils.normalize_hex_color(color_normal.to_html())
 	assert_eq(color_normal_normalized, Color.LIGHT_CORAL)
 	assert_eq(color_light_normalized, Color(0.8, 0.8, 0.8, 1))
 	assert_eq(color_dark_normalized, Color(0.2, 0.2, 0.2, 1))

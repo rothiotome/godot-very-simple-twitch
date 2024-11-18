@@ -2,7 +2,7 @@ extends GutTest
 
 func test_parse_login():
 	# Parse a good substring from a real payload
-	var result = VSTParseHelper.parse_login(":rothio!rothio@rothio.tmi.twitch.tv")
+	var result:String = VSTParseHelper.parse_login(":rothio!rothio@rothio.tmi.twitch.tv")
 	assert_eq(result, "rothio")
 	result = VSTParseHelper.parse_login(":rothiotome!rothiotome@rothiotome.tmi.twitch.tv")
 	assert_eq(result, "rothiotome")
@@ -14,7 +14,7 @@ func test_parse_login():
 
 func test_parse_channel():
 	# Parse a good substring from a real payload
-	var result = VSTParseHelper.parse_channel("#rothio")
+	var result:String = VSTParseHelper.parse_channel("#rothio")
 	assert_eq(result, "rothio")
 
 	# Not parsing a wrong substring from payload
@@ -24,7 +24,7 @@ func test_parse_channel():
 
 func test_parse_message():
 	# Parse a good substring from a real payload
-	var result = VSTParseHelper.parse_message(":rothioCuchillo rothioJeje")
+	var result:String = VSTParseHelper.parse_message(":rothioCuchillo rothioJeje")
 	assert_eq(result, "rothioCuchillo rothioJeje")
 	result = VSTParseHelper.parse_message(":  rothioCuchillo rothioJeje  ")
 	assert_eq(result, "rothioCuchillo rothioJeje")
@@ -45,10 +45,10 @@ mod=0;returning-chatter=0;room-id=156108906;subscriber=1;tmi-sent-ts=1;turbo=0;u
 	assert_eq(result.color_hex, "#FF666F")
 	assert_eq(result.display_name, "RothioTome")
 
-	var parsed_badges = {"broadcaster": "1", "subscriber": "0"}
+	var parsed_badges:Dictionary = {"broadcaster": "1", "subscriber": "0"}
 	assert_eq_deep(result.badges, parsed_badges)
 
-	var parsed_emotes = { "emotesv2_3328e0d6b6714a6a90dc8f58d09e5648": "11-24", 
+	var parsed_emotes:Dictionary = { "emotesv2_3328e0d6b6714a6a90dc8f58d09e5648": "11-24", 
 	"emotesv2_4b9a9537c7e34c3395ada46471c4097e": "26-35" }
 
 	assert_eq_deep(result.emotes, parsed_emotes)
@@ -56,10 +56,10 @@ mod=0;returning-chatter=0;room-id=156108906;subscriber=1;tmi-sent-ts=1;turbo=0;u
 
 func test_parse_badges():
 	var array:PackedStringArray = ["verified/2", "broadcaster/1", "subscriber/0"]
-	var parsed = {"verified": "2", "broadcaster": "1", "subscriber": "0"}
+	var parsed:Dictionary = {"verified": "2", "broadcaster": "1", "subscriber": "0"}
 
 	# Parse an array with a good badge format
-	var result = VSTParseHelper.parse_badges(array)
+	var result:Dictionary = VSTParseHelper.parse_badges(array)
 	assert_eq_deep(result, parsed)
 	
 	# Parse an array with some bad badge format
@@ -75,11 +75,11 @@ func test_parse_badges():
 func test_parse_emotes():
 	var array:PackedStringArray = ["emotesv2_3328e0d6b6714a6a90dc8f58d09e5648:11-24", 
 	"emotesv2_4b9a9537c7e34c3395ada46471c4097e:26-35"]
-	var parsed = { "emotesv2_3328e0d6b6714a6a90dc8f58d09e5648": "11-24", 
+	var parsed:Dictionary = { "emotesv2_3328e0d6b6714a6a90dc8f58d09e5648": "11-24", 
 	"emotesv2_4b9a9537c7e34c3395ada46471c4097e": "26-35" }
 
 	# Parse an array with a good emote format
-	var result = VSTParseHelper.parse_emotes(array)
+	var result:Dictionary = VSTParseHelper.parse_emotes(array)
 	assert_eq_deep(result, parsed)
 
 	# Parse an empty emote array
@@ -95,7 +95,7 @@ func test_parse_emotes():
 
 func test_parse_substring():
 	# Returning expected value from char to char substring
-	var result = VSTParseHelper.get_substring(":abc!",":","!")
+	var result:String = VSTParseHelper.get_substring(":abc!",":","!")
 	assert_eq(result, "abc")
 	result = VSTParseHelper.get_substring("abcdef","b","f")
 	assert_eq(result, "cde")
