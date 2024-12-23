@@ -16,6 +16,7 @@ Easily connect your Godot games to Twitch chat. Log in with a single line of cod
 		- [Get Token and login to channel](#get-token-and-login-to-channel)
 	- [Receive chat messages](#how-to-receive-chat-messages)
 	- [Send chat messages](#how-to-send-chat-messages)
+	- [Logout](#how-to-logout)
 - [Editor Docks](#editor-docks)
 	- [Very Simple Twitch](#very-simple-twitch)
 	- [VstChatDock](#vst-chat-dock)
@@ -99,6 +100,10 @@ func print_chatter_message(chatter: Chatter):
 
 ## How to send chat messages
 To send chat messages you can use the ``VerySimpleTwitch.send_chat_message("Hello world")`` static method. Sending chat messages is only available when you use OAuth connection method with a Token that has writting permissions.
+
+## How to Logout
+To logout from an already connected Twitch Channel, you can use the method ``VerySimpleTwitch.end_chat_client()`` to stop the connection. This method is useful if the user misspelled their channel name with Anonymous connection or want to change accounts / stop the integration. 
+
 
 ## Editor Docks
 Godot Very Simple Twitch has two docks. One at the bottom called Very Simple Twitch and one at the right called VSTChatDock. Each is used for a specific function:

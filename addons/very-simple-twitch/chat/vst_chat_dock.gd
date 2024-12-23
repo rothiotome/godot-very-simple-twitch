@@ -45,10 +45,8 @@ func _on_line_edit_text_changed(new_text):
 	connect_button.disabled = len(new_text) == 0
 
 func _on_disconnect_button_pressed():
-	# TODO: Ok, It's too much removing the node and placing another. Change it when logout method is available
-	twitch_chat.queue_free()
-	twitch_chat = null
-
+	twitch_chat._disconnect()
+	
 	clear_all_messages()
 	show_connect_layout()
 

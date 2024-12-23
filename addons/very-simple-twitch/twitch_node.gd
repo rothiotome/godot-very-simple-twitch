@@ -45,21 +45,20 @@ func get_badge(badge_name: String, badge_level: String, channel_id: String = "_g
 func get_emote(loc_id: String):
 	return await _twitch_chat.get_emote(loc_id)
 
+# clear all support nodes, disconects from chat/auth server 
+func end_chat_client():
+	if _twitch_chat:
+		_twitch_chat._disconnect()
+		_twitch_chat.OnMessage.disconnect(on_chat_message_received)
+		remove_child(_twitch_chat)
+		_twitch_chat.queue_free()
+		_twitch_chat = null
 
-func vip():
-	pass
-
-
-func remove_vip():
-	pass
-
-
-func timeout():
-	pass
-
-
-func remove_timeout():
-	pass
+	if _twitch_api:
+		_twitch_api._disconnect()
+		remove_child(_twitch_api)
+		_twitch_api.queue_free()
+		_twitch_api = null
 
 func send_chat_message(message: String):
 	_twitch_chat.send_message(message)

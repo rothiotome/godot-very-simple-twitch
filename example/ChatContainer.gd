@@ -55,3 +55,7 @@ func is_scroll_bottom() -> bool:
 # Returns escaped BBCode that won't be parsed by RichTextLabel as tags.
 func escape_bbcode(bbcode_text):
 	return bbcode_text.replace("[", "[lb]")
+
+func clear():
+	for child in chat_message_container.get_children():
+		chat_message_container.remove_child(child)

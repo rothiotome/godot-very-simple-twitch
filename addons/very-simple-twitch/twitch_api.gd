@@ -19,6 +19,7 @@ var _scopes: PackedStringArray
 var _client_id: String
 
 var _user: VSTChannel
+var auth_server: VSTAuthServer
 
 func initiate_twitch_auth():
 	_scopes = VSTSettings.get_setting(VSTSettings.settings.scopes)
@@ -27,10 +28,12 @@ func initiate_twitch_auth():
 	var redirect_port = VSTSettings.get_setting(VSTSettings.settings.redirect_port)
 	var uuid = VSTSettings.get_setting(VSTSettings.settings.uuid)
 
-	var auth_server = VSTAuthServer.new()
+	if auth_server:
+		_disconnect()
+
+	auth_server = VSTAuthServer.new()
 	add_child(auth_server)
 	auth_server.OnTokenReceived.connect(_on_auth_server_on_token_received)
-	auth_server.stop_server()
 	auth_server.start_server(redirect_port)
 
 	var redirect_uri = redirect_host + str(redirect_port) + "/" + uuid
@@ -130,3 +133,9 @@ func remove_vip(user_to_remove_vip_id: String, on_success: Callable = Callable()
 	set_on_call_fail(request_fail.bind(on_fail)).\
 	set_on_call_success(on_success).\
 	launch_request(self)
+
+# clear the nodes and stop the auth_server if its running
+func _disconnect():
+	if auth_server:
+		auth_server.stop_server()
+		remove_child(auth_server)

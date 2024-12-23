@@ -23,29 +23,46 @@ grow_vertical = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="LoginToken" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="ChannelName" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Get Token and Login Chat"
+size_flags_horizontal = 3
+size_flags_vertical = 4
+placeholder_text = "ChannelName"
 
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="LoginLayout" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 6
 
-[node name="ChannelName" type="LineEdit" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
-unique_name_in_owner = true
+[node name="LoginToken" type="Button" parent="VBoxContainer/HBoxContainer/LoginLayout"]
 layout_mode = 2
-placeholder_text = "ChannelName"
+text = "Get Token and Login Chat"
 
-[node name="LoginAnon" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="LoginAnon" type="Button" parent="VBoxContainer/HBoxContainer/LoginLayout"]
 layout_mode = 2
 text = "Login Anon"
+
+[node name="LoggedInLayout" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="LogoutButton" type="Button" parent="VBoxContainer/HBoxContainer/LoggedInLayout"]
+layout_mode = 2
+text = "Logout"
+
+[node name="ClearChar" type="Button" parent="VBoxContainer/HBoxContainer/LoggedInLayout"]
+layout_mode = 2
+text = "Clear chat"
 
 [node name="TwitchChat" parent="VBoxContainer" instance=ExtResource("1_o6alc")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/LoginToken" to="." method="login_token"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/LoginAnon" to="." method="login_anon"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/LoginLayout/LoginToken" to="." method="login_token"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/LoginLayout/LoginAnon" to="." method="login_anon"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/LoggedInLayout/LogoutButton" to="." method="logout"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/LoggedInLayout/ClearChar" to="." method="clear_chat"]

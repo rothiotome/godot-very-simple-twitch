@@ -2,6 +2,7 @@
 
 class_name VSTChat extends Node
 
+# TODO: rename to past simple?
 signal OnSucess
 signal OnMessage(chatter: VSTChatter)
 signal OnFailure(reason: String)
@@ -277,3 +278,10 @@ func get_settings():
 	_use_cache = VSTSettings.get_setting(VSTSettings.settings.disk_cache)
 	_cache_path = VSTSettings.get_setting(VSTSettings.settings.disk_cache_path)
 	_chat_timeout_ms = VSTSettings.get_setting(VSTSettings.settings.twitch_timeout_ms)
+
+# stops chat socket from tts server
+func _disconnect():
+	if _chatClient:
+		_chatClient.close()
+	
+	_hasConnected = false
