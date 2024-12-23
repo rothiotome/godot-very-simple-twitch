@@ -102,7 +102,7 @@ func print_chatter_message(chatter: Chatter):
 To send chat messages you can use the ``VerySimpleTwitch.send_chat_message("Hello world")`` static method. Sending chat messages is only available when you use OAuth connection method with a Token that has writting permissions.
 
 ## How to Logout
-After a login, maybe you want to change to another channel or just only logout from twitch. You can use ``VerySimpleTwitch.end_chat_client()`` to disconnect to the last channel and all the signals.
+To logout from an already connected Twitch Channel, you can use the method ``VerySimpleTwitch.end_chat_client()`` to stop the connection. This method is useful if the user misspelled their channel name with Anonymous connection or want to change accounts / stop the integration. 
 
 
 ## Editor Docks

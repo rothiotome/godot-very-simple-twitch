@@ -45,7 +45,7 @@ func get_badge(badge_name: String, badge_level: String, channel_id: String = "_g
 func get_emote(loc_id: String):
 	return await _twitch_chat.get_emote(loc_id)
 
-# clear all support nodes, disconects and from chat/auth server 
+# clear all support nodes, disconects from chat/auth server 
 func end_chat_client():
 	if _twitch_chat:
 		_twitch_chat._disconnect()
