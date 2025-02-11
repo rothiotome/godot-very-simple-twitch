@@ -4,7 +4,7 @@ var server:VSTAuthServer
 
 func test_initial_settings():
 	var client_id:String = VSTSettings.get_setting(VSTSettings.settings.client_id)
-	assert_eq(client_id, "") # no initial value
+	assert_eq(client_id, "", "For security reasons no client id should be pushed to the public repository.") # no initial value
 	assert_eq(VSTSettings.settings.client_id.path, "config/client_id")
 	
 	var twitch_chat_url:String = VSTSettings.get_setting(VSTSettings.settings.twitch_chat_url)
