@@ -14,7 +14,12 @@ func _ready():
 	warning_icon.texture = get_theme_icon("StatusWarning", "EditorIcons")
 	copy_button.icon = get_theme_icon("ActionCopy", "EditorIcons")
 	copy_button.tooltip_text = "Copy Redirect URL to clipboard"
-	client_id_warning.add_theme_color_override("font_color", EditorInterface.get_editor_settings().get_setting("text_editor/theme/highlighting/comment_markers/warning_color"))
+	client_id_warning.add_theme_color_override(
+			"font_color",
+			EditorInterface.get_editor_settings()\
+			.get_setting("text_editor/theme/highlighting/comment_markers/warning_color")
+	)
+
 	visibility_changed.connect(on_visibility_changed)
 
 
@@ -32,7 +37,6 @@ func update_visuals():
 	var redirect_host = VSTSettings.get_setting(VSTSettings.settings.redirect_host)
 	var redirect_port = VSTSettings.get_setting(VSTSettings.settings.redirect_port)
 	var uuid = VSTSettings.get_setting(VSTSettings.settings.uuid)
-		
 	redirect_uri.text = redirect_host + str(redirect_port) + "/" + uuid
 	client_id_line_edit.text = client_id
 	if client_id == "":
@@ -48,9 +52,11 @@ func copy_redirect_uri():
 
 
 func client_id_submitted():
-	ProjectSettings.set_setting("very_simple_twitch/"+VSTSettings.settings.client_id.path, client_id_line_edit.text)
+	ProjectSettings.set_setting(
+			"very_simple_twitch/"+VSTSettings.settings.client_id.path,
+			client_id_line_edit.text
+	)
 	ProjectSettings.save()
-	
 
 func open_url(meta):
 	OS.shell_open(meta)

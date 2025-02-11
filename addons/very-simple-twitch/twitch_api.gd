@@ -4,7 +4,6 @@ extends Node
 
 signal token_received(TwitchChannel)
 
-
 const RESPONSE_TYPE = 'token'
 
 const TWITCH_VALIDATE_URL = "https://id.twitch.tv/oauth2/validate"
@@ -15,11 +14,11 @@ const TWITCH_SETTINGS_URL = "https://api.twitch.tv/helix/chat/settings"
 const TWITCH_CHATTERS_URL = "https://api.twitch.tv/helix/chat/chatters"
 
 
+var auth_server: VSTAuthServer
+
 var _scopes: PackedStringArray
 var _client_id: String
-
 var _user: VSTChannel
-var auth_server: VSTAuthServer
 
 func initiate_twitch_auth():
 	_scopes = VSTSettings.get_setting(VSTSettings.settings.scopes)
@@ -29,7 +28,7 @@ func initiate_twitch_auth():
 	var uuid = VSTSettings.get_setting(VSTSettings.settings.uuid)
 
 	if auth_server:
-		_disconnect()
+		disconnect_api()
 
 	auth_server = VSTAuthServer.new()
 	add_child(auth_server)
@@ -38,7 +37,10 @@ func initiate_twitch_auth():
 
 	var redirect_uri = redirect_host + str(redirect_port) + "/" + uuid
 	var scopes_string = "+".join(_scopes)
-	var url = "client_id=" + _client_id + "&redirect_uri=" + redirect_uri + "&response_type=" + RESPONSE_TYPE + "&scope=" + scopes_string
+	var url = "client_id=" + _client_id
+	url += "&redirect_uri=" +redirect_uri
+	url += "&response_type=" + RESPONSE_TYPE
+	url += "&scope=" + scopes_string
 
 	OS.shell_open(TWITCH_OAUTH_URL + "?" + url)
 
@@ -79,7 +81,8 @@ func validate_token_and_get_user_id(token: String):
 	client.queue_free()
 	return user
 
-func timeout_user(user_to_ban_id: String, duration: int = 1, reason: String = '', on_success: Callable = Callable(), on_fail: Callable = Callable()):
+func timeout_user(user_to_ban_id: String, duration: int = 1, reason: String = '',
+				on_success: Callable = Callable(), on_fail: Callable = Callable()) -> void:
 	if !_user:
 		return
 
@@ -92,50 +95,70 @@ func timeout_user(user_to_ban_id: String, duration: int = 1, reason: String = ''
 		},
 	}
 
-	VSTNetwork_Call.new().to(TWITCH_BAN_URL).\
-	add_all_get_params({'broadcaster_id': _user.id,
-		'moderator_id': _user.id}).\
-	with(body).\
-	verb(HTTPClient.METHOD_POST).\
-	add_all_headers({'Client-Id: ' : _client_id,
+	var vst = VSTNetwork_Call.new()
+	vst.to(TWITCH_BAN_URL)
+	vst.add_all_get_params({
+		'broadcaster_id': _user.id,
+		'moderator_id': _user.id
+	}).\
+	vst.with(body)
+	vst.verb(HTTPClient.METHOD_POST)
+	vst.add_all_headers({
+		'Client-Id: ' : _client_id,
 		'Authorization': 'Bearer ' + _user.token,
-		'Content-Type': 'application/json'}).\
-	set_on_call_fail(request_fail.bind(on_fail)).\
-	set_on_call_success(on_success).\
-	launch_request(self)
+		'Content-Type': 'application/json'
+	})
+	vst.set_on_call_success(on_success)
+	vst.set_on_call_fail(request_fail.bind(on_fail))
+	vst.launch_request(self)
 
-func add_vip(user_to_vip_id: String, on_success: Callable = Callable(), on_fail: Callable = Callable()):
+
+func add_vip(user_to_vip_id: String, on_success: Callable = Callable(),
+			on_fail: Callable = Callable()):
 	if !_user:
 		return
 
-	VSTNetwork_Call.new().to(TWITCH_VIP_URL).\
-	add_all_get_params({'broadcaster_id': _user.id,
-		'user_id': user_to_vip_id}).\
-	verb(HTTPClient.METHOD_POST).\
-	add_all_headers({'Client-Id: ' : _client_id,
+	var vst = VSTNetwork_Call.new()
+	vst.to(TWITCH_VIP_URL)
+	vst.add_all_get_params({
+		'broadcaster_id': _user.id,
+		'user_id': user_to_vip_id
+	})
+	vst.verb(HTTPClient.METHOD_POST)
+	vst.add_all_headers({
+		'Client-Id: ' : _client_id,
 		'Authorization': 'Bearer ' + _user.token,
-		'Content-Type': 'application/json'}).\
-	set_on_call_fail(request_fail.bind(on_fail)).\
-	set_on_call_success(on_success).\
-	launch_request(self)
+		'Content-Type': 'application/json'
+	})
+	vst.set_on_call_success(on_success)
+	vst.set_on_call_fail(request_fail.bind(on_fail))
 
-func remove_vip(user_to_remove_vip_id: String, on_success: Callable = Callable(), on_fail: Callable = Callable()):
+	vst.launch_request(self)
+
+func remove_vip(user_to_remove_vip_id: String, on_success: Callable = Callable(),
+				on_fail: Callable = Callable()) -> void:
 	if !_user:
 		return
 
-	VSTNetwork_Call.new().to(TWITCH_VIP_URL).\
-	add_all_get_params({'broadcaster_id': _user.id,
-		'user_id': user_to_remove_vip_id}).\
-	verb(HTTPClient.METHOD_DELETE).\
-	add_all_headers({'Client-Id: ' : _client_id,
+	var vst = VSTNetwork_Call.new()
+	vst.to(TWITCH_VIP_URL)
+	vst.add_all_get_params({
+		'broadcaster_id': _user.id,
+		'user_id': user_to_remove_vip_id
+	})
+	vst.verb(HTTPClient.METHOD_DELETE)
+	vst.add_all_headers({
+		'Client-Id: ' : _client_id,
 		'Authorization': 'Bearer ' + _user.token,
-		'Content-Type': 'application/json'}).\
-	set_on_call_fail(request_fail.bind(on_fail)).\
-	set_on_call_success(on_success).\
-	launch_request(self)
+		'Content-Type': 'application/json'
+	})
+	vst.set_on_call_success(on_success)
+	vst.set_on_call_fail(request_fail.bind(on_fail))
 
-# clear the nodes and stop the auth_server if its running
-func _disconnect():
+	vst.launch_request(self)
+
+
+func disconnect_api():
 	if auth_server:
 		auth_server.stop_server()
 		remove_child(auth_server)

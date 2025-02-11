@@ -125,7 +125,10 @@ func _launch_network_request(parent: Node):
 	var final_url = _compile_url(url, get_params)
 	var client = HTTPRequest.new()
 	client.timeout = timeout
-	client.request_completed.connect(on_request_completed.bind(final_url))
+	client.request_completed.connect(func():
+		on_request_completed.bind(final_url)
+		client.queue_free()
+	)
 
 	add_child(client)
 	await get_tree().process_frame
@@ -134,6 +137,7 @@ func _launch_network_request(parent: Node):
 	if request_error != OK:
 		var error:VSTError = VSTError.new(VSTError.VSTCodeError.PARAM_ERROR, "The request can't be archieved reason: "+str(request_error))
 		on_call_fail.call(error)
+		client.queue_free()
 		return
 
 

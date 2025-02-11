@@ -1,11 +1,9 @@
 @tool
-
 class_name VSTChat extends Node
 
 # TODO: rename to past simple?
-signal OnSucess
+signal Connected(_channel)
 signal OnMessage(chatter: VSTChatter)
-signal OnFailure(reason: String)
 
 var _channel: VSTChannel
 
@@ -100,7 +98,7 @@ func onChatConnected():
 		pass
 		
 	_chatClient.send_text('JOIN ' + '#' + _channel.login.to_lower())
-	OnSucess.emit()
+	Connected.emit()
 
 func send_message(message: String):
 	_chat_queue.append("PRIVMSG #" + _channel.login.to_lower() + " :" + message + "\r\n")
@@ -280,7 +278,7 @@ func get_settings():
 	_chat_timeout_ms = VSTSettings.get_setting(VSTSettings.settings.twitch_timeout_ms)
 
 # stops chat socket from tts server
-func _disconnect():
+func disconnect_api():
 	if _chatClient:
 		_chatClient.close()
 	

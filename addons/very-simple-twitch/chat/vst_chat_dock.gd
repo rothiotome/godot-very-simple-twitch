@@ -2,7 +2,7 @@
 extends Control
 
 const MAX_MESSAGES:int = 50
-var line:PackedScene = load("res://addons/very-simple-twitch/chat/vst_chat_dock_line.tscn")
+var line: PackedScene = load("res://addons/very-simple-twitch/chat/vst_chat_dock_line.tscn")
 
 
 var twitch_chat: VSTChat:
@@ -30,9 +30,8 @@ func _ready():
 	support_button.tooltip_text = "Support me on Ko-fi"
 
 func _on_button_pressed():
-	twitch_chat.OnSucess.connect(on_chat_connected)
+	twitch_chat.Connected.connect(on_chat_connected)
 	twitch_chat.OnMessage.connect(create_chatter_msg)
-	twitch_chat.OnFailure.connect(on_error)
 
 	twitch_chat.login_anon(channel_line_edit.text)
 	connect_button.disabled = true
@@ -45,10 +44,14 @@ func _on_line_edit_text_changed(new_text):
 	connect_button.disabled = len(new_text) == 0
 
 func _on_disconnect_button_pressed():
-	twitch_chat._disconnect()
-	
+	twitch_chat.disconnect_api()
 	clear_all_messages()
 	show_connect_layout()
+	if twitch_chat.Connected.is_connected(on_chat_connected):
+		twitch_chat.Connected.disconnect(on_chat_connected)
+	if twitch_chat.OnMessage.is_connected(create_chatter_msg):
+		twitch_chat.OnMessage.disconnect(create_chatter_msg)
+
 
 func _on_support_button_pressed() -> void:
 	OS.shell_open("https://ko-fi.com/rothiotome?ref=VST")
@@ -57,11 +60,6 @@ func _on_support_button_pressed() -> void:
 func on_chat_connected():
 	create_system_msg("Connected to chat")
 	show_chat_layout()
-
-func on_error():
-	create_system_msg("Failed to connect into chat")
-	connect_button.disabled = false
-	channel_line_edit.editable = true
 
 func create_system_msg(message: String):
 	var msg = line.instantiate()
@@ -114,11 +112,15 @@ func add_emotes(chatter: VSTChatter):
 	for loc in locations:
 		var result = await twitch_chat.get_emote(loc.id)
 		var emote_string = "[img=center]" + result.resource_path +"[/img]"
-		chatter.message = chatter.message.substr(0, loc.start + offset) + emote_string + chatter.message.substr(loc.end + offset + 1)
+		var pre: String = chatter.message.substr(0, loc.start + offset)
+		var post: String = chatter.message.substr(loc.end + offset + 1)
+		chatter.message = pre + emote_string + post
 		offset += emote_string.length() + loc.start - loc.end - 1
 
 func is_scroll_bottom() -> bool:
-	return chat_scroll.scroll_vertical == chat_scroll.get_v_scroll_bar().max_value - chat_scroll.get_v_scroll_bar().get_rect().size.y
+	var scroll_bar = chat_scroll.get_v_scroll_bar()
+	return chat_scroll.scroll_vertical >= scroll_bar.max_value - scroll_bar.get_rect().size.y
+
 
 # Returns escaped BBCode that won't be parsed by RichTextLabel as tags.
 func escape_bbcode(bbcode_text) -> String:
