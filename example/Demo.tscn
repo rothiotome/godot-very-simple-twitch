@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://rr154c1ykwoh"]
+[gd_scene load_steps=4 format=3 uid="uid://rr154c1ykwoh"]
 
 [ext_resource type="PackedScene" uid="uid://yhuh0huitds8" path="res://example/TwitchChat.tscn" id="1_o6alc"]
 [ext_resource type="Script" path="res://example/demo.gd" id="1_uj756"]
+[ext_resource type="Texture2D" uid="uid://yarcej88qjri" path="res://example/arrow_down.svg" id="2_nmg8t"]
 
 [node name="Demo" type="Control"]
 layout_mode = 3
@@ -20,49 +21,139 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+current_tab = 0
+
+[node name="Oauth Connection" type="PanelContainer" parent="VBoxContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TabContainer/Oauth Connection"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="OauthConnectionLayout" type="VBoxContainer" parent="VBoxContainer/TabContainer/Oauth Connection/MarginContainer"]
 layout_mode = 2
 
-[node name="ChannelName" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+[node name="OauthTitleToggle" type="Button" parent="VBoxContainer/TabContainer/Oauth Connection/MarginContainer/OauthConnectionLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = "Get Token and login to channel"
+icon = ExtResource("2_nmg8t")
+alignment = 0
+
+[node name="Description" type="RichTextLabel" parent="VBoxContainer/TabContainer/Oauth Connection/MarginContainer/OauthConnectionLayout"]
+layout_mode = 2
+bbcode_enabled = true
+text = "You can use [color=#d2a8ff] VerySimpleTwitch.get_token_and_login_chat()[/color] to retrieve the token and automatically login to the twitch chat.
+
+| [color=gray]Note: You will need to set up the CLIENT_ID in the Settings tab and configure the Twitch app accordingly."
+fit_content = true
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Oauth Connection/MarginContainer/OauthConnectionLayout"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="LoginToken" type="Button" parent="VBoxContainer/TabContainer/Oauth Connection/MarginContainer/OauthConnectionLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Get Token and Login Chat"
+
+[node name="Anonymous Connection" type="PanelContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TabContainer/Anonymous Connection"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="AnonymousConnectionLayout" type="VBoxContainer" parent="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer"]
+layout_mode = 2
+
+[node name="AnonymousTitleToggle" type="Button" parent="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer/AnonymousConnectionLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = "Simple anonymous connection"
+icon = ExtResource("2_nmg8t")
+alignment = 0
+
+[node name="Description" type="RichTextLabel" parent="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer/AnonymousConnectionLayout"]
+layout_mode = 2
+bbcode_enabled = true
+text = "This is the easiest way to use the plugin. You can use [color=#d2a8ff]VerySimpleTwitch.login_chat_anon(\"channel_name\")[/color] to connect to the channel without needing a token or any settings customization."
+fit_content = true
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer/AnonymousConnectionLayout"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="LoginChat" type="VBoxContainer" parent="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer/AnonymousConnectionLayout"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer/AnonymousConnectionLayout/LoginChat"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer/AnonymousConnectionLayout/LoginChat/HBoxContainer"]
+layout_mode = 2
+text = "Channel Name: "
+
+[node name="ChannelName" type="LineEdit" parent="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer/AnonymousConnectionLayout/LoginChat/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-placeholder_text = "ChannelName"
+placeholder_text = "MyChannelName"
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="LoginLayout" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="LoginToken" type="Button" parent="VBoxContainer/HBoxContainer/LoginLayout"]
-layout_mode = 2
-text = "Get Token and Login Chat"
-
-[node name="LoginAnon" type="Button" parent="VBoxContainer/HBoxContainer/LoginLayout"]
+[node name="LoginAnon" type="Button" parent="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer/AnonymousConnectionLayout/LoginChat"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Login Anon"
 
-[node name="LoggedInLayout" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="LoggedLayout" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
+alignment = 1
 
-[node name="LogoutButton" type="Button" parent="VBoxContainer/HBoxContainer/LoggedInLayout"]
+[node name="LogoutButton" type="Button" parent="VBoxContainer/LoggedLayout"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Logout"
 
-[node name="ClearChar" type="Button" parent="VBoxContainer/HBoxContainer/LoggedInLayout"]
+[node name="ClearChar" type="Button" parent="VBoxContainer/LoggedLayout"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Clear chat"
+
+[node name="ConnectedLabel" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Connected to channel"
 
 [node name="TwitchChat" parent="VBoxContainer" instance=ExtResource("1_o6alc")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/LoginLayout/LoginToken" to="." method="login_token"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/LoginLayout/LoginAnon" to="." method="login_anon"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/LoggedInLayout/LogoutButton" to="." method="logout"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/LoggedInLayout/ClearChar" to="." method="clear_chat"]
+[connection signal="toggled" from="VBoxContainer/TabContainer/Oauth Connection/MarginContainer/OauthConnectionLayout/OauthTitleToggle" to="." method="_on_oauth_title_toggle_toggled"]
+[connection signal="toggled" from="VBoxContainer/TabContainer/Oauth Connection/MarginContainer/OauthConnectionLayout/OauthTitleToggle" to="VBoxContainer/TabContainer/Oauth Connection/MarginContainer/OauthConnectionLayout/Description" method="set_visible"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Oauth Connection/MarginContainer/OauthConnectionLayout/LoginToken" to="." method="login_token"]
+[connection signal="toggled" from="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer/AnonymousConnectionLayout/AnonymousTitleToggle" to="." method="_on_anonymous_title_toggle_toggled"]
+[connection signal="toggled" from="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer/AnonymousConnectionLayout/AnonymousTitleToggle" to="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer/AnonymousConnectionLayout/Description" method="set_visible"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer/AnonymousConnectionLayout/LoginChat/LoginAnon" to="." method="login_anon"]
+[connection signal="pressed" from="VBoxContainer/LoggedLayout/LogoutButton" to="." method="logout"]
+[connection signal="pressed" from="VBoxContainer/LoggedLayout/ClearChar" to="." method="clear_chat"]
