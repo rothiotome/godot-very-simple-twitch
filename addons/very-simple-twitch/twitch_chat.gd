@@ -49,7 +49,7 @@ func _process(_delta: float):
 				onChatConnected()
 			while _chatClient.get_available_packet_count():
 				onReceivedData(_chatClient.get_packet())
-			if !_chat_queue.is_empty() and _last_msg + (_last_msg + _chat_timeout_ms) <= Time.get_ticks_msec():
+			if !_chat_queue.is_empty() and (_last_msg + _chat_timeout_ms) <= Time.get_ticks_msec():
 				_chatClient.send_text(_chat_queue.pop_front())
 				_last_msg = Time.get_ticks_msec()
 		WebSocketPeer.STATE_CLOSED:
