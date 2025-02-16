@@ -138,6 +138,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Clear chat"
 
+[node name="TestConnection" type="Button" parent="VBoxContainer/LoggedLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Test Connection"
+
 [node name="ConnectedLabel" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 visible = false
@@ -157,3 +162,4 @@ size_flags_vertical = 3
 [connection signal="pressed" from="VBoxContainer/TabContainer/Anonymous Connection/MarginContainer/AnonymousConnectionLayout/LoginChat/LoginAnon" to="." method="login_anon"]
 [connection signal="pressed" from="VBoxContainer/LoggedLayout/LogoutButton" to="." method="logout"]
 [connection signal="pressed" from="VBoxContainer/LoggedLayout/ClearChar" to="." method="clear_chat"]
+[connection signal="pressed" from="VBoxContainer/LoggedLayout/TestConnection" to="." method="_on_test_connection_pressed"]

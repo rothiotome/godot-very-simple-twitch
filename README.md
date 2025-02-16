@@ -102,6 +102,10 @@ func print_chatter_message(chatter: Chatter):
 ## How to send chat messages
 To send chat messages, you can use the ``VerySimpleTwitch.send_chat_message("Hello world")`` static method. Sending chat messages is only available when you use the OAuth connection method with a Token that has writing permissions.
 
+## How test conneciton
+
+To ensure you are connected to the Twitch channel, you can use the ```VerySimpleTwitch.is_connected_to_server(callable)```. method. This method will pass`true` or `false`, depending on whether the plugin is connected to the Twitch channel through callable.
+
 ## How to Logout
 To log out from an already connected Twitch Channel, you can use the method ``VerySimpleTwitch.end_chat_client()`` to stop the connection. This method is useful if the user misspelled their channel name with Anonymous connection or wants to change accounts / stop the integration.
 

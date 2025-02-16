@@ -1,14 +1,21 @@
 @tool
 class_name VSTChat extends Node
 
+const TIMEOUT_PING_IN_SECONDS = 5
+const TIME_BETWEEN_PING_IN_SECONDS = 10
+
 # TODO: rename to past simple?
 signal Connected(_channel)
 signal OnMessage(chatter: VSTChatter)
+signal is_connected_to(result:bool)
 
 var _channel: VSTChannel
 
 var _chatClient: WebSocketPeer
 var _hasConnected:= false
+
+var last_ping_unix_time:int
+var last_ping_response:bool
 
 enum RequestType {
 	EMOTE,
@@ -109,6 +116,14 @@ func onReceivedData(payload: PackedByteArray):
 	for n in splittled_messages:
 		handle_message(n)
 
+func send_ping():
+	if last_ping_unix_time+TIME_BETWEEN_PING_IN_SECONDS >= Time.get_unix_time_from_system():
+		is_connected_to.emit(last_ping_response) # return last response avoiding the flood
+		return
+	var timer = get_tree().create_timer(TIMEOUT_PING_IN_SECONDS)
+	timer.timeout.connect(_raise_last_ping_signal.bind(false))
+	_chatClient.send_text("PING :tmi.twitch.tv")
+
 #TODO: move this to parse helper?
 func parse_message_from_twtich_IRC(message: String) -> PackedStringArray:
 	return message.split(" ", true, 4) # We might need more than 3
@@ -116,6 +131,10 @@ func parse_message_from_twtich_IRC(message: String) -> PackedStringArray:
 func handle_message(message: String):
 	if message.begins_with("PING"):
 		_chatClient.send_text(message.replace("PING", "PONG"))
+		return
+
+	if message.begins_with(":tmi.twitch.tv PONG"):
+		_raise_last_ping_signal(true)
 		return
 
 	var parsed_message: PackedStringArray = parse_message_from_twtich_IRC(message)
@@ -283,3 +302,9 @@ func disconnect_api():
 		_chatClient.close()
 	
 	_hasConnected = false
+
+func _raise_last_ping_signal(result:bool):
+	if last_ping_unix_time+TIME_BETWEEN_PING_IN_SECONDS >= Time.get_unix_time_from_system(): return
+	last_ping_unix_time = Time.get_unix_time_from_system()
+	last_ping_response = result
+	is_connected_to.emit(result)
