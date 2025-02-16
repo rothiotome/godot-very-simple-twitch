@@ -120,6 +120,7 @@ func send_ping():
 	if last_ping_unix_time+TIME_BETWEEN_PING_IN_SECONDS >= Time.get_unix_time_from_system():
 		is_connected_to.emit(last_ping_response) # return last response avoiding the flood
 		return
+	# timer for timeout will raise allways and check the status before
 	var timer = get_tree().create_timer(TIMEOUT_PING_IN_SECONDS)
 	timer.timeout.connect(_raise_last_ping_signal.bind(false))
 	_chatClient.send_text("PING :tmi.twitch.tv")
@@ -304,6 +305,8 @@ func disconnect_api():
 	_hasConnected = false
 
 func _raise_last_ping_signal(result:bool):
+	# This method can be called by timer timeout or by mistake, check the status
+	# and only modify, change values if we are in that window
 	if last_ping_unix_time+TIME_BETWEEN_PING_IN_SECONDS >= Time.get_unix_time_from_system(): return
 	last_ping_unix_time = Time.get_unix_time_from_system()
 	last_ping_response = result

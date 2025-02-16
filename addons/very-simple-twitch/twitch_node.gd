@@ -72,12 +72,14 @@ func on_chat_message_received(chatter: VSTChatter):
 
 
 func is_connected_to_server(callable:Callable):
+	# first and naive checks for connection status
 	if !_twitch_chat: 
 		callable.bind(false).call() 
 		return
 	if !_twitch_chat._hasConnected: 
 		callable.bind(false).call() 
 		return
+	# if is connected already, will response later. Don't care this call
 	if _twitch_chat.is_connected_to.is_connected(callable): return
 	_twitch_chat.is_connected_to.connect(callable, CONNECT_ONE_SHOT)
 	_twitch_chat.send_ping()
