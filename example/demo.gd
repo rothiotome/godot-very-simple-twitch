@@ -13,6 +13,10 @@ func logout():
 	%TwitchChat.clear()
 	_show_login_layout()
 
+func _on_test_connection_pressed() -> void:
+	VerySimpleTwitch.is_connected_to_server(func (connection_result):
+		print("Connected? -> %s" % str(connection_result))
+	)
 
 #region Local methods to simplify demo
 func _show_login_layout():
