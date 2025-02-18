@@ -69,3 +69,20 @@ func send_chat_message(message: String):
 
 func on_chat_message_received(chatter: VSTChatter):
 	chat_message_received.emit(chatter)
+
+## Return if puglin is connected to the twitch channel. This method may take some time
+## because if there are no new messages the plugin will send a message and wait for a message 
+## from twtich
+func check_connection() -> bool:
+	# first and naive checks for connection status
+	if !_twitch_chat: 
+		return false
+	if !_twitch_chat._hasConnected: 
+		return false
+	# needs to be deferred because can return a saved value instant without awaiting
+	_twitch_chat.call_deferred("is_connected_to_chat")
+	return await _twitch_chat.on_conection_check_request
+
+## Return the timestamp (unix format) of the last time you receive a message from twitch chat
+func get_last_time_message() -> int:
+	return _twitch_chat.last_ping_unix_time
