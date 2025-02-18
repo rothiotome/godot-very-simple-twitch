@@ -1,13 +1,10 @@
 @tool
 class_name VSTChat extends Node
 
-const TIMEOUT_PING_IN_SECONDS = 5
-const TIME_BETWEEN_PING_IN_SECONDS = 10
-
 # TODO: rename to past simple?
 signal Connected(_channel)
 signal OnMessage(chatter: VSTChatter)
-signal is_connected_to(result:bool)
+signal on_conection_check_request(result)
 
 var _channel: VSTChannel
 
@@ -15,7 +12,6 @@ var _chatClient: WebSocketPeer
 var _hasConnected:= false
 
 var last_ping_unix_time:int
-var last_ping_response:bool
 
 enum RequestType {
 	EMOTE,
@@ -41,6 +37,10 @@ var _use_anon_connection:= false
 var _chat_queue : Array[String] = []
 var _last_msg : int = Time.get_ticks_msec()
 var _chat_timeout_ms: int
+var twitch_timeout_ping_chat: int
+var _time_between_events: int
+var _conected_to_chat:bool
+var _conected_to_chat_request:bool
 
 const USER_AGENT : String = "User-Agent: VSTC/0.1.0 (Godot Engine)"
 
@@ -116,26 +116,35 @@ func onReceivedData(payload: PackedByteArray):
 	for n in splittled_messages:
 		handle_message(n)
 
-func send_ping():
-	if last_ping_unix_time+TIME_BETWEEN_PING_IN_SECONDS >= Time.get_unix_time_from_system():
-		is_connected_to.emit(last_ping_response) # return last response avoiding the flood
-		return
-	# timer for timeout will raise allways and check the status before
-	var timer = get_tree().create_timer(TIMEOUT_PING_IN_SECONDS)
-	timer.timeout.connect(_raise_last_ping_signal.bind(false))
-	_chatClient.send_text("PING :tmi.twitch.tv")
+func is_connected_to_chat() -> void:
+	# is request in event time window? -> "now-last_time <= window_time"
+	if Time.get_unix_time_from_system()-last_ping_unix_time <= _time_between_events:
+		_conected_to_chat_request = true
+		get_tree().create_timer(twitch_timeout_ping_chat).timeout.connect(on_timeout_timer_ping_chat)
+		_chatClient.send_text("PING :tmi.twitch.tv")
+	else:
+		on_conection_check_request.emit(_conected_to_chat)
+
+
 
 #TODO: move this to parse helper?
 func parse_message_from_twtich_IRC(message: String) -> PackedStringArray:
 	return message.split(" ", true, 4) # We might need more than 3
 	
 func handle_message(message: String):
+	_update_conneciton_status(true)
+	
+	if _conected_to_chat_request:
+		# if we are waiting for any response
+		_conected_to_chat_request = false
+		on_conection_check_request.emit(_conected_to_chat)
+
 	if message.begins_with("PING"):
 		_chatClient.send_text(message.replace("PING", "PONG"))
 		return
 
 	if message.begins_with(":tmi.twitch.tv PONG"):
-		_raise_last_ping_signal(true)
+		# it's a pong message, we don't need do anything
 		return
 
 	var parsed_message: PackedStringArray = parse_message_from_twtich_IRC(message)
@@ -296,6 +305,8 @@ func get_settings():
 	_use_cache = VSTSettings.get_setting(VSTSettings.settings.disk_cache)
 	_cache_path = VSTSettings.get_setting(VSTSettings.settings.disk_cache_path)
 	_chat_timeout_ms = VSTSettings.get_setting(VSTSettings.settings.twitch_timeout_ms)
+	_time_between_events = VSTSettings.get_setting(VSTSettings.settings.twitch_time_between_interactions_s)
+	twitch_timeout_ping_chat = VSTSettings.get_setting(VSTSettings.settings.twitch_timeout_ping_chat_s)
 
 # stops chat socket from tts server
 func disconnect_api():
@@ -304,10 +315,13 @@ func disconnect_api():
 	
 	_hasConnected = false
 
-func _raise_last_ping_signal(result:bool):
-	# This method can be called by timer timeout or by mistake, check the status
-	# and only modify, change values if we are in that window
-	if last_ping_unix_time+TIME_BETWEEN_PING_IN_SECONDS >= Time.get_unix_time_from_system(): return
+func _update_conneciton_status(new_status:bool):
 	last_ping_unix_time = Time.get_unix_time_from_system()
-	last_ping_response = result
-	is_connected_to.emit(result)
+	_conected_to_chat = new_status
+
+
+func on_timeout_timer_ping_chat():
+	# if we haven't received a message since we stared pinging, we are disconected
+	if _conected_to_chat_request:
+		_update_conneciton_status(false)
+		on_conection_check_request.emit(_conected_to_chat)

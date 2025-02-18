@@ -104,7 +104,8 @@ To send chat messages, you can use the ``VerySimpleTwitch.send_chat_message("Hel
 
 ## How test conneciton
 
-To ensure you are connected to the Twitch channel, you can use the ```VerySimpleTwitch.is_connected_to_server(callable)```. method. This method will pass`true` or `false`, depending on whether the plugin is connected to the Twitch channel through callable.
+To ensure you are connected to the Twitch channel, you can use the ```await VerySimpleTwitch.check_connection()```. method. This method will return `true` or `false`, depending on whether the plugin is connected to the Twitch channel. 
+It's an asyncronous method because may take time to receive a message from twitch if there is no interactions for a while.
 
 ## How to Logout
 To log out from an already connected Twitch Channel, you can use the method ``VerySimpleTwitch.end_chat_client()`` to stop the connection. This method is useful if the user misspelled their channel name with Anonymous connection or wants to change accounts / stop the integration.

@@ -14,10 +14,11 @@ func logout():
 	_show_login_layout()
 
 func _on_test_connection_pressed() -> void:
-	VerySimpleTwitch.is_connected_to_server(func (connection_result):
-		print("Connected? -> %s" % str(connection_result))
-	)
-
+	if await VerySimpleTwitch.check_connection():
+		print("Is connected!")
+	else:
+		print("Is not connected :(")
+		
 #region Local methods to simplify demo
 func _show_login_layout():
 	%TabContainer.set_tab_disabled(0, false)
