@@ -4,6 +4,7 @@ class_name VSTChat extends Node
 # TODO: rename to past simple?
 signal Connected(_channel)
 signal OnMessage(chatter: VSTChatter)
+signal connection_failed(will_reconect:bool, attemps:int)
 
 var _channel: VSTChannel
 
@@ -37,6 +38,16 @@ var _chat_timeout_ms: int
 
 const USER_AGENT : String = "User-Agent: VSTC/0.1.0 (Godot Engine)"
 
+var timer_to_reconnect: Timer
+var attemps:int
+var _max_times_reconect:int
+var _time_await_for_reconnect:int
+
+func _ready() -> void:
+	timer_to_reconnect = Timer.new()
+	timer_to_reconnect.timeout.connect(attempt_reconnect)
+	add_child(timer_to_reconnect)
+
 func _process(_delta: float):
 	if !_chatClient:
 		return
@@ -60,14 +71,35 @@ func _process(_delta: float):
 				print('Disconnected from twitch chat')
 				print("WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
 				print("Reconnecting")
-				start_chat_client()
+				launch_reconnect()
 
 func start_chat_client():
 	get_settings()
+	attemps = 0
+	connect_to_server()
+
+func connect_to_server():
 	if _chatClient:
 		_chatClient.close()
 	_chatClient = WebSocketPeer.new()
-	_chatClient.connect_to_url("%s:%d" % [_twitch_chat_url, _twitch_chat_port])
+	var err = _chatClient.connect_to_url("%s:%d" % [_twitch_chat_url, _twitch_chat_port])
+	if err != OK:
+		launch_reconnect()
+
+func launch_reconnect():
+	if attemps != _max_times_reconect:
+		attemps += 1
+		timer_to_reconnect.time = _time_await_for_reconnect
+		timer_to_reconnect.start()
+		connection_failed.emit(true, attemps)
+	else:
+		disconnect_api()
+		connection_failed.emit(false, attemps)
+
+
+func attempt_reconnect():
+	attemps += 1
+	connect_to_server()
 
 
 func login_anon(channel_name: String):
@@ -103,6 +135,9 @@ func onChatConnected():
 func send_message(message: String):
 	_chat_queue.append("PRIVMSG #" + _channel.login.to_lower() + " :" + message + "\r\n")
 
+func _leave_channel():
+	_chat_queue.append("PART #" + _channel.login.to_lower() + "\r\n")
+
 func onReceivedData(payload: PackedByteArray):
 	var message = payload.get_string_from_utf8()
 	var splittled_messages = message.split("\n")
@@ -116,6 +151,10 @@ func parse_message_from_twtich_IRC(message: String) -> PackedStringArray:
 func handle_message(message: String):
 	if message.begins_with("PING"):
 		_chatClient.send_text(message.replace("PING", "PONG"))
+		return
+		
+	if message.begins_with("ERROR"):
+		launch_reconnect()
 		return
 
 	var parsed_message: PackedStringArray = parse_message_from_twtich_IRC(message)
@@ -276,10 +315,17 @@ func get_settings():
 	_use_cache = VSTSettings.get_setting(VSTSettings.settings.disk_cache)
 	_cache_path = VSTSettings.get_setting(VSTSettings.settings.disk_cache_path)
 	_chat_timeout_ms = VSTSettings.get_setting(VSTSettings.settings.twitch_timeout_ms)
+	_max_times_reconect = VSTSettings.get_setting(VSTSettings.settings.max_tries_reconnect)
+	_time_await_for_reconnect = VSTSettings.get_setting(VSTSettings.settings.time_reconnect)
 
 # stops chat socket from tts server
 func disconnect_api():
-	if _chatClient:
-		_chatClient.close()
-	
-	_hasConnected = false
+	if timer_to_reconnect.time_left > 0:
+		timer_to_reconnect.stop()
+
+	if !_chatClient: return
+
+	if _hasConnected:
+		_leave_channel()
+		_hasConnected = false
+	_chatClient.close()
