@@ -86,6 +86,20 @@ const settings: Dictionary = {
 		"hint_string": "Time between messages sent by the client",
 		"is_basic": false,
 		"initial_value": 320,
+	},
+	"max_tries_reconnect":{
+		"path": "advanced_config/max_tries_reconnect",
+		"type:": TYPE_INT,
+		"hint_string": "Maximum times it will attempt to reconnect",
+		"is_basic": false,
+		"initial_value": 3,
+	},
+	"time_reconnect":{
+		"path": "advanced_config/time_reconnect",
+		"type:": TYPE_INT,
+		"hint_string": "Time in seconds between reconnections",
+		"is_basic": false,
+		"initial_value": 5,
 	}
 }
 

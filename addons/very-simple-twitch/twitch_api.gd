@@ -3,6 +3,7 @@ class_name VSTAPI
 extends Node
 
 signal token_received(TwitchChannel)
+signal connection_failed(will_reconect:bool, attemps:int)
 
 const RESPONSE_TYPE = 'token'
 
@@ -20,13 +21,43 @@ var _scopes: PackedStringArray
 var _client_id: String
 var _user: VSTChannel
 
+var timer_to_reconnect: Timer
+var attemps:int
+var _max_times_reconect:int
+var _time_await_for_reconnect:int
+
+func _ready() -> void:
+	timer_to_reconnect = Timer.new()
+	timer_to_reconnect.timeout.connect(attempt_reconnect)
+	add_child(timer_to_reconnect)
+
+func attempt_reconnect():
+	attemps += 1
+	connect_to_server()
+
+
+func launch_reconnect():
+	if attemps != _max_times_reconect:
+		attemps += 1
+		timer_to_reconnect.time = _time_await_for_reconnect
+		timer_to_reconnect.start()
+		connection_failed.emit(true, attemps)
+	else:
+		disconnect_api()
+		connection_failed.emit(false, attemps)
+
 func initiate_twitch_auth():
 	_scopes = VSTSettings.get_setting(VSTSettings.settings.scopes)
 	_client_id = VSTSettings.get_setting(VSTSettings.settings.client_id)
+	_time_await_for_reconnect = VSTSettings.get_setting(VSTSettings.settings.time_reconnect)
+	_max_times_reconect = VSTSettings.get_setting(VSTSettings.settings.max_tries_reconnect)
+	connect_to_server()
+
+func connect_to_server():
 	var redirect_host = VSTSettings.get_setting(VSTSettings.settings.redirect_host)
 	var redirect_port = VSTSettings.get_setting(VSTSettings.settings.redirect_port)
 	var uuid = VSTSettings.get_setting(VSTSettings.settings.uuid)
-
+	
 	if auth_server:
 		disconnect_api()
 
@@ -47,7 +78,7 @@ func initiate_twitch_auth():
 func _on_auth_server_on_token_received(token) -> void:
 	var validated_user = await validate_token_and_get_user_id(token)
 	if !(validated_user):
-		print('Invalid token')
+		launch_reconnect()
 		_user = null
 		return
 	_user = validated_user
@@ -56,7 +87,7 @@ func _on_auth_server_on_token_received(token) -> void:
 func request_fail(status:int, error: VSTError, on_fail: Callable):
 	if status == 401 or status == 403:
 		#Unauthorized? No mi ciela
-		initiate_twitch_auth()
+		launch_reconnect()
 		# TODO: should chain the request?
 	else:
 		push_warning(error)
