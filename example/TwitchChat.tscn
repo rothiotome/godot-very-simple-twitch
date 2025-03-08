@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://yhuh0huitds8"]
 
-[ext_resource type="Script" path="res://example/ChatContainer.gd" id="2_f56i7"]
+[ext_resource type="Script" uid="uid://cwf72vpbjxsuk" path="res://example/ChatContainer.gd" id="2_f56i7"]
 
 [node name="TwitchChat" type="VBoxContainer"]
 anchors_preset = 15
