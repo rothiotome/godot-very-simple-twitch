@@ -98,7 +98,7 @@ func onChatConnected():
 		pass
 		
 	_chatClient.send_text('JOIN ' + '#' + _channel.login.to_lower())
-	Connected.emit()
+	Connected.emit(_channel)
 
 func send_message(message: String):
 	_chat_queue.append("PRIVMSG #" + _channel.login.to_lower() + " :" + message + "\r\n")
