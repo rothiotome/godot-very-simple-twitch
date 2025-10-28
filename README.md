@@ -95,7 +95,7 @@ To receive Twitch chat messages, connect the `chat_message_received` signal from
 func _ready():
 	VerySimpleTwitch.chat_message_received.connect(print_chatter_message)
 
-func print_chatter_message(chatter: Chatter):
+func print_chatter_message(chatter: VSTChatter):
 	print("Message received from %s: %s" % [chatter.tags.display_name, chatter.message])
 ```
 
