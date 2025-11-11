@@ -5,6 +5,9 @@
 
 * text=auto
 /addons/gdLinter export-ignore
+/addons/gdLinter/** export-ignore
+/addons/gut export-ignore
+/addons/gut/** export-ignore
 /.github export-ignore
 /docs export-ignore
 /.gitattributes export-ignore
