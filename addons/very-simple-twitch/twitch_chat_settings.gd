@@ -86,6 +86,20 @@ const settings: Dictionary = {
 		"hint_string": "Time between messages sent by the client",
 		"is_basic": false,
 		"initial_value": 320,
+	},
+	"twitch_timeout_ping_chat_s":{
+		"path": "advanced_config/twitch_timeout_ping_chat_s",
+		"type:": TYPE_INT,
+		"hint_string": "Timeout time in seconds used when pinging twitch chat",
+		"is_basic": false,
+		"initial_value": 5,
+	},
+	"twitch_time_between_interactions_s":{
+		"path": "advanced_config/twitch_time_between_interactions_s",
+		"type:": TYPE_INT,
+		"hint_string": "Time in seconds between events until sending a ping to twitch",
+		"is_basic": false,
+		"initial_value": 300,
 	}
 }
 

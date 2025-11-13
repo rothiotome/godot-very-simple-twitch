@@ -13,7 +13,12 @@ func logout():
 	%TwitchChat.clear()
 	_show_login_layout()
 
-
+func _on_test_connection_pressed() -> void:
+	if await VerySimpleTwitch.check_connection():
+		print("Is connected!")
+	else:
+		print("Is not connected :(")
+		
 #region Local methods to simplify demo
 func _show_login_layout():
 	%TabContainer.set_tab_disabled(0, false)
