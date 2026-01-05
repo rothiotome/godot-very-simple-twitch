@@ -57,7 +57,7 @@ func _on_support_button_pressed() -> void:
 	OS.shell_open("https://ko-fi.com/rothiotome?ref=VST")
 
 
-func on_chat_connected():
+func on_chat_connected(channel):
 	create_system_msg("Connected to chat")
 	show_chat_layout()
 
