@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bo1un8cwcrpqr"]
 
-[ext_resource type="Script" path="res://addons/very-simple-twitch/chat/vst_chat_dock_line.gd" id="1_h0lnd"]
+[ext_resource type="Script" uid="uid://b0bmon8cd06fl" path="res://addons/very-simple-twitch/chat/vst_chat_dock_line.gd" id="1_h0lnd"]
 
 [node name="VstChatDockLine" type="HBoxContainer"]
 offset_right = 1.0

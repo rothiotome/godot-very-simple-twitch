@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://rr154c1ykwoh"]
 
 [ext_resource type="PackedScene" uid="uid://yhuh0huitds8" path="res://example/TwitchChat.tscn" id="1_o6alc"]
-[ext_resource type="Script" path="res://example/demo.gd" id="1_uj756"]
+[ext_resource type="Script" uid="uid://f5sl1ewqq4b8" path="res://example/demo.gd" id="1_uj756"]
 [ext_resource type="Texture2D" uid="uid://yarcej88qjri" path="res://example/arrow_down.svg" id="2_nmg8t"]
 
 [node name="Demo" type="Control"]
