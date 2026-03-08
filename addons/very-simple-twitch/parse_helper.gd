@@ -33,7 +33,7 @@ static func parse_tags(input_string:String) -> VSTIRCTags:
 				irc_tags.display_name = splitted_tag[1]
 			"emotes":
 				irc_tags.emotes = parse_emotes(splitted_tag[1].split("/"))
-			"room-id":
+			"user-id":
 				irc_tags.user_id = splitted_tag[1]
 
 	return irc_tags
