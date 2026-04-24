@@ -67,6 +67,8 @@ To use Very Simple Twitch, you will need to set up a new App in the Twitch devel
 
 That's all! Everything is ready to use!
 
+> **IMPORTANT:** You need to add "*.html" to export files filter in order to make the plugin works in exported projects.
+
 ## How to Use
 
 ## How to Login
@@ -128,6 +130,12 @@ Just add and activate the plugin as explained in the installation instructions. 
 ## FAQ and Troubleshooting
 ### Change Settings
 You can change the Settings in ``Project > Project Settings > General > Very Simple Twitch``. Note that switching on the ``Advanced Settings`` toggle will allow you to customize your client even further. Advanced configurations are not supposed to be changed without further knowledge of how Twitch works.
+
+### My project doesn't work after export and some SCRIPT ERROR appears
+Make sure you add the "*.html" file exception in you export setting. If you don't, after connecting, an error like the following will appear: ``SCRIPT ERROR: Attempt to call function 'get_as_text' in base 'null instance' on a null instance.``
+
+### I want to use the API but I need to add some scopes. Can I add more scopes?
+Yes, you can. Go to ``Project > Project Settings > General > Very Simple Twitch > Config`` and you will see a collapsed list of scopes. Add or remove the scopes you want there.
 
 ## License
 This project is released under the MIT License by RothioTome (2024).
