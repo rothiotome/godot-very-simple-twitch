@@ -10,19 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-
+    - uses: actions/checkout@v6.0.2
+    - run: touch ./test_results.xml
     - name: Tests
-      uses: croconut/godot-tester@v5
+      uses: croconut/godot-tester@v5.2
       with:
         # required
         version: "4.2.1"
         release_type: "stable"
-        is-mono: "true"
+        is-mono: "false"
         import-time: "5"
         test-timeout: "45"
         minimum-pass: "1"
         test-dir: "res://test"
         # default is false, set true to count asserts instead of tests
-        assert-check: "true" 
-        max-fails: 1  
+        assert-check: "true"
+        max-fails: 1
+        custom-godot-dl-url: "https://github.com/godotengine/godot/releases/download/4.2.1-stable/Godot_v4.2.1-stable_linux.x86_64.zip"
