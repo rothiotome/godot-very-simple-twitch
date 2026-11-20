@@ -18,10 +18,13 @@ func login_chat(channel_info: VSTChannel):
 	_twitch_chat.login(channel_info)
 	chat_connected.emit(await _twitch_chat.Connected)
 
-
-func get_token_and_login_chat():
-	var channel_info =  await get_token()
-	await login_chat(channel_info)
+## Fetches token and logins to `channel`, if no channel is provided it will default to the token holder's channel
+func get_token_and_login_chat(channel := ""):
+	var target_channel := await get_token()
+	if channel != "":
+		target_channel = VSTChannel.new()
+		target_channel.login = channel
+	await login_chat(target_channel)
 
 
 func _start_chat_client():

@@ -23,6 +23,7 @@ Easily connect your Godot games to Twitch chat. Log in with a single line of cod
 		- [Usage](#usage)
 		- [Features](#features)
 		- [Modifications](#modifications)
+- [Exporting the project](#exporting-the-project)
 - [FAQ and Troubleshooting](#faq-and-troubleshooting)
 	- [Change Settings](#change-settings)
 - [License](#license)
@@ -90,6 +91,12 @@ VerySimpleTwitch.get_token_and_login_chat()
 
 > Note: You will need to set up the CLIENT_ID in the Settings tab and configure the Twitch app accordingly.
 
+Optionally you can log in to a specific channel by passing the channel name as a parameter.
+
+```GDScript
+VerySimpleTwitch.get_token_and_login_chat("channel_name")
+```
+
 ## How to receive chat messages
 To receive Twitch chat messages, connect the `chat_message_received` signal from VerySimpleTwitch. The signal contains all the information available from the chatter, including display_name, badges, tags, and colors.
 
@@ -126,6 +133,10 @@ Just add and activate the plugin as explained in the installation instructions. 
 - The chat dock works ONLY in anonymous mode, so you don't need any authorization token, just the channel name.
 - There is a limit for saved messages. The default is 50 messages, but it can be changed in the editor settings (TBI).
 - You can delete all chat messages.
+
+## Exporting the project
+
+In order for the plugin to work properly when exported `addons/very-simple-twitch/public/index.html` needs to be included in the export, check your Filters to export non-resource files/folders under the `Resources` tab of the export preset dialog.
 
 ## FAQ and Troubleshooting
 ### Change Settings
