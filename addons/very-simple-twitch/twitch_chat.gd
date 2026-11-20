@@ -120,7 +120,9 @@ func handle_message(message: String):
 
 	var parsed_message: PackedStringArray = parse_message_from_twtich_IRC(message)
 	
-	if parsed_message.size() < 2: return
+	if parsed_message.size() <= 2:
+		print_debug("Can't process this message: %s" % [message])
+		return
 
 	match parsed_message[2]:
 		"NOTICE":
